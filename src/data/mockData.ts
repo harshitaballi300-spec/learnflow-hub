@@ -1,4 +1,52 @@
-import { Subject, Section, User, Enrollment } from '@/types/lms';
+import { Subject, Section, User, Enrollment, Instructor } from '@/types/lms';
+
+export const mockInstructors: Instructor[] = [
+  {
+    id: 'i1',
+    name: 'Dr. Sarah Chen',
+    expertise: 'Python & Database',
+    bio: 'PhD in Computer Science with 10+ years of teaching experience in Python and database systems.',
+    imageUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&h=300&fit=crop&crop=face',
+    courses: 2,
+    rating: 4.9,
+  },
+  {
+    id: 'i2',
+    name: 'Mark Rivera',
+    expertise: 'Web Development',
+    bio: 'Senior frontend engineer and educator specializing in React and modern web technologies.',
+    imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face',
+    courses: 1,
+    rating: 4.8,
+  },
+  {
+    id: 'i3',
+    name: 'Dr. Aisha Patel',
+    expertise: 'Computer Science',
+    bio: 'Algorithm expert and competitive programming coach with publications in top CS journals.',
+    imageUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=300&fit=crop&crop=face',
+    courses: 1,
+    rating: 4.9,
+  },
+  {
+    id: 'i4',
+    name: 'Prof. James Wu',
+    expertise: 'AI & Machine Learning',
+    bio: 'ML researcher and professor bringing cutting-edge AI concepts to practical learning.',
+    imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face',
+    courses: 1,
+    rating: 4.7,
+  },
+  {
+    id: 'i5',
+    name: 'Emma Torres',
+    expertise: 'UI/UX Design',
+    bio: 'Design lead with experience at top tech companies, passionate about user-centered design.',
+    imageUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop&crop=face',
+    courses: 1,
+    rating: 4.8,
+  },
+];
 
 export const mockUser: User = {
   id: 'u1',
@@ -12,7 +60,7 @@ export const mockUser: User = {
 export const mockAdmin: User = {
   id: 'u2',
   name: 'Dr. Sarah Chen',
-  email: 'sarah@example.com',
+  email: 'admin@example.com',
   role: 'admin',
   avatar: '',
   createdAt: '2023-06-01',

@@ -52,3 +52,18 @@ export interface Progress {
   completed: boolean;
   completedAt?: string;
 }
+
+export interface Instructor {
+  id: string;
+  name: string;
+  expertise: string;
+  bio: string;
+  imageUrl: string;
+  courses: number;
+  rating: number;
+}
+
+export interface CartItem {
+  subjectId: string;
+  addedAt: string;
+}
