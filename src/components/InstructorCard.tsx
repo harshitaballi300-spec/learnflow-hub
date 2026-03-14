@@ -1,5 +1,5 @@
 import { Instructor } from '@/types/lms';
-import { Star, BookOpen } from 'lucide-react';
+import { Star, Users, BookOpen } from 'lucide-react';
 import { useState } from 'react';
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=300&h=300&fit=crop&crop=face';
@@ -8,28 +8,38 @@ const InstructorCard = ({ instructor }: { instructor: Instructor }) => {
   const [imgError, setImgError] = useState(false);
 
   return (
-    <div className="glass-card group rounded-xl p-6 text-center transition-all hover:shadow-md hover:-translate-y-1">
-      <div className="mx-auto mb-4 h-24 w-24 overflow-hidden rounded-full border-2 border-primary/20">
-        <img
-          src={imgError ? FALLBACK_IMAGE : instructor.imageUrl}
-          alt={instructor.name}
-          className="h-full w-full object-cover"
-          onError={() => setImgError(true)}
-        />
+    <div className="group rounded-lg border border-border bg-card p-5 transition-all hover:shadow-md">
+      <div className="flex items-start gap-4">
+        <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/20">
+          <img
+            src={imgError ? FALLBACK_IMAGE : instructor.imageUrl}
+            alt={instructor.name}
+            className="h-full w-full object-cover"
+            onError={() => setImgError(true)}
+          />
+        </div>
+        <div className="min-w-0">
+          <h3 className="font-display text-base font-bold text-primary underline-offset-2 group-hover:underline">
+            {instructor.name}
+          </h3>
+          <p className="text-sm text-muted-foreground">{instructor.expertise}</p>
+          <div className="mt-2 flex flex-col gap-0.5 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <Star className="h-3 w-3 fill-accent text-accent" />
+              {instructor.rating} Instructor Rating
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Users className="h-3 w-3" />
+              {instructor.studentCount?.toLocaleString() ?? '0'} Students
+            </span>
+            <span className="flex items-center gap-1.5">
+              <BookOpen className="h-3 w-3" />
+              {instructor.courses} Courses
+            </span>
+          </div>
+        </div>
       </div>
-      <h3 className="font-display text-lg font-semibold group-hover:text-primary transition-colors">
-        {instructor.name}
-      </h3>
-      <p className="mt-1 text-sm font-medium text-primary">{instructor.expertise}</p>
-      <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{instructor.bio}</p>
-      <div className="mt-4 flex items-center justify-center gap-4 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1">
-          <BookOpen className="h-3.5 w-3.5" />{instructor.courses} courses
-        </span>
-        <span className="flex items-center gap-1">
-          <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />{instructor.rating}
-        </span>
-      </div>
+      <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{instructor.bio}</p>
     </div>
   );
 };
