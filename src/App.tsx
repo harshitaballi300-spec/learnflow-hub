@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
 import Navbar from "@/components/Navbar";
+import AIChatbot from "@/components/AIChatbot";
 import HomePage from "./pages/HomePage";
 import CoursesPage from "./pages/CoursesPage";
 import CourseDetailPage from "./pages/CourseDetailPage";
@@ -40,6 +41,7 @@ const App = () => (
               <Route path="/payment" element={<PaymentPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <AIChatbot />
           </CartProvider>
         </AuthProvider>
       </BrowserRouter>

@@ -18,6 +18,16 @@ export interface Subject {
   totalDuration: string;
   enrolledCount: number;
   createdAt: string;
+  price: number;
+  originalPrice: number;
+  rating: number;
+  reviewCount: number;
+  bestseller: boolean;
+  level: 'Beginner' | 'Intermediate' | 'Advanced' | 'All Levels';
+  whatYouWillLearn: string[];
+  requirements: string[];
+  language: string;
+  lastUpdated: string;
 }
 
 export interface Section {
@@ -61,6 +71,8 @@ export interface Instructor {
   imageUrl: string;
   courses: number;
   rating: number;
+  studentCount: number;
+  reviewCount: number;
 }
 
 export interface CartItem {
