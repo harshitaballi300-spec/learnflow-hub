@@ -1,11 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { BookOpen, LayoutDashboard, LogOut, Menu, Shield, X } from 'lucide-react';
+import { useCart } from '@/contexts/CartContext';
+import { BookOpen, LayoutDashboard, LogOut, Menu, Shield, ShoppingCart, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 
 const Navbar = () => {
   const { user, logout, isAdmin } = useAuth();
+  const { cartCount } = useCart();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -33,7 +35,7 @@ const Navbar = () => {
             <>
               <Link to="/dashboard">
                 <Button variant="ghost" size="sm">
-                  <LayoutDashboard className="mr-1.5 h-4 w-4" />Dashboard
+                  <LayoutDashboard className="mr-1.5 h-4 w-4" />My Learning
                 </Button>
               </Link>
               {isAdmin && (
@@ -43,6 +45,16 @@ const Navbar = () => {
                   </Button>
                 </Link>
               )}
+              <Link to="/cart" className="relative">
+                <Button variant="ghost" size="sm">
+                  <ShoppingCart className="h-4 w-4" />
+                  {cartCount > 0 && (
+                    <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                      {cartCount}
+                    </span>
+                  )}
+                </Button>
+              </Link>
               <div className="ml-2 flex items-center gap-2 rounded-full bg-muted px-3 py-1.5">
                 <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground">
                   {user.name.charAt(0)}
@@ -83,13 +95,21 @@ const Navbar = () => {
             {user ? (
               <>
                 <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
-                  <Button variant="ghost" className="w-full justify-start">Dashboard</Button>
+                  <Button variant="ghost" className="w-full justify-start">My Learning</Button>
+                </Link>
+                <Link to="/cart" onClick={() => setMobileOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start">
+                    Cart {cartCount > 0 && `(${cartCount})`}
+                  </Button>
                 </Link>
                 {isAdmin && (
                   <Link to="/admin" onClick={() => setMobileOpen(false)}>
                     <Button variant="ghost" className="w-full justify-start">Admin</Button>
                   </Link>
                 )}
+                <div className="px-4 py-2 text-sm text-muted-foreground">
+                  Signed in as <span className="font-medium text-foreground">{user.name}</span>
+                </div>
                 <Button variant="ghost" className="w-full justify-start" onClick={() => { handleLogout(); setMobileOpen(false); }}>
                   Log out
                 </Button>
