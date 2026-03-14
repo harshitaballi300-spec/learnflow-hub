@@ -1,5 +1,6 @@
 import { useAuth } from '@/contexts/AuthContext';
-import { mockSubjects, mockEnrollments, completedLessonIds, mockSections } from '@/data/mockData';
+import { useCart } from '@/contexts/CartContext';
+import { mockSections, completedLessonIds } from '@/data/mockData';
 import ProgressBar from '@/components/ProgressBar';
 import { Link, Navigate } from 'react-router-dom';
 import { BookOpen, Clock, PlayCircle, TrendingUp } from 'lucide-react';
@@ -7,21 +8,14 @@ import { Button } from '@/components/ui/button';
 
 const DashboardPage = () => {
   const { user } = useAuth();
+  const { getPurchasedSubjects } = useCart();
 
   if (!user) return <Navigate to="/login" replace />;
 
-  const enrolledSubjects = mockEnrollments
-    .filter(e => e.userId === user.id)
-    .map(e => ({
-      ...e,
-      subject: mockSubjects.find(s => s.id === e.subjectId)!,
-    }))
-    .filter(e => e.subject);
-
+  const purchasedSubjects = getPurchasedSubjects();
   const totalCompleted = completedLessonIds.size;
   const totalLessons = mockSections.flatMap(s => s.lessons).length;
 
-  // Get the first incomplete lesson for "continue watching"
   const allLessons = mockSections.flatMap(s => s.lessons);
   const nextLesson = allLessons.find(l => !completedLessonIds.has(l.id));
 
@@ -35,9 +29,9 @@ const DashboardPage = () => {
       {/* Stats */}
       <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
-          { icon: BookOpen, label: 'Enrolled Courses', value: enrolledSubjects.length, color: 'text-primary' },
-          { icon: PlayCircle, label: 'Lessons Completed', value: totalCompleted, color: 'text-success' },
-          { icon: TrendingUp, label: 'Overall Progress', value: `${Math.round((totalCompleted / totalLessons) * 100)}%`, color: 'text-secondary' },
+          { icon: BookOpen, label: 'Enrolled Courses', value: purchasedSubjects.length, color: 'text-primary' },
+          { icon: PlayCircle, label: 'Lessons Completed', value: totalCompleted, color: 'text-green-600' },
+          { icon: TrendingUp, label: 'Overall Progress', value: totalLessons > 0 ? `${Math.round((totalCompleted / totalLessons) * 100)}%` : '0%', color: 'text-secondary' },
           { icon: Clock, label: 'Hours Learned', value: '24h', color: 'text-accent' },
         ].map(stat => (
           <div key={stat.label} className="glass-card flex items-center gap-4 rounded-xl p-5">
@@ -53,7 +47,7 @@ const DashboardPage = () => {
       </div>
 
       {/* Continue Watching */}
-      {nextLesson && (
+      {nextLesson && purchasedSubjects.length > 0 && (
         <div className="mb-10">
           <h2 className="mb-4 font-display text-xl font-bold">Continue Watching</h2>
           <div className="glass-card flex flex-col items-start gap-4 rounded-xl p-5 sm:flex-row sm:items-center">
@@ -71,11 +65,11 @@ const DashboardPage = () => {
         </div>
       )}
 
-      {/* Enrolled Courses */}
-      <h2 className="mb-4 font-display text-xl font-bold">My Courses</h2>
-      {enrolledSubjects.length > 0 ? (
+      {/* My Learning */}
+      <h2 className="mb-4 font-display text-xl font-bold">My Learning</h2>
+      {purchasedSubjects.length > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {enrolledSubjects.map(({ subject, progress }) => (
+          {purchasedSubjects.map(subject => (
             <Link key={subject.id} to={`/courses/${subject.id}`} className="glass-card group rounded-xl p-5 transition-all hover:shadow-md">
               <div className="mb-3 flex items-start justify-between">
                 <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
@@ -86,14 +80,14 @@ const DashboardPage = () => {
               <h3 className="font-display font-semibold group-hover:text-primary transition-colors">{subject.title}</h3>
               <p className="mt-1 text-sm text-muted-foreground">by {subject.instructor}</p>
               <div className="mt-4">
-                <ProgressBar value={progress} size="sm" />
+                <ProgressBar value={0} size="sm" />
               </div>
             </Link>
           ))}
         </div>
       ) : (
         <div className="glass-card rounded-xl p-10 text-center">
-          <p className="text-muted-foreground">You haven't enrolled in any courses yet.</p>
+          <p className="text-muted-foreground">You haven't purchased any courses yet.</p>
           <Link to="/courses">
             <Button className="mt-4 gradient-primary border-0 text-primary-foreground">Browse Courses</Button>
           </Link>

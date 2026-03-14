@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { mockSubjects } from '@/data/mockData';
+import { mockSubjects, mockInstructors } from '@/data/mockData';
 import CourseCard from '@/components/CourseCard';
+import InstructorCard from '@/components/InstructorCard';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, BookOpen, GraduationCap, TrendingUp, Users } from 'lucide-react';
 
@@ -75,6 +76,21 @@ const HomePage = () => {
           {mockSubjects.slice(0, 3).map((subject) => (
             <CourseCard key={subject.id} subject={subject} />
           ))}
+        </div>
+      </section>
+
+      {/* Mentors / Instructors */}
+      <section className="border-t border-border bg-card/30">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+          <div className="mb-8 text-center">
+            <h2 className="font-display text-2xl font-bold sm:text-3xl">Meet Our Instructors</h2>
+            <p className="mt-2 text-muted-foreground">Learn from industry experts and experienced educators</p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            {mockInstructors.map((instructor) => (
+              <InstructorCard key={instructor.id} instructor={instructor} />
+            ))}
+          </div>
         </div>
       </section>
     </div>
