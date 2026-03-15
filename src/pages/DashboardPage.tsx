@@ -16,8 +16,13 @@ const DashboardPage = () => {
   const totalCompleted = completedLessonIds.size;
   const totalLessons = mockSections.flatMap(s => s.lessons).length;
 
-  const allLessons = mockSections.flatMap(s => s.lessons);
-  const nextLesson = allLessons.find(l => !completedLessonIds.has(l.id));
+    const purchasedIds = purchasedSubjects.map(s => s.id);
+    const purchasedSections = mockSections.filter(s => purchasedIds.includes(s.subjectId));
+    const allLessons = purchasedSections.flatMap(s => s.lessons);
+    const nextLesson = allLessons.find(l => !completedLessonIds.has(l.id));
+    const nextLessonSubjectId = nextLesson
+      ? purchasedSections.find(s => s.lessons.some(l => l.id === nextLesson.id))?.subjectId
+      : undefined;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
