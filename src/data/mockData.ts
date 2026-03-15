@@ -483,6 +483,8 @@ export const mockSubjects: Subject[] = [
     language: 'English',
     lastUpdated: '2026-03-08',
   },
+];
+
 export const mockSections: Section[] = [
   {
     id: 'sec1', subjectId: 's1', title: 'Getting Started with Python', orderIndex: 1,
