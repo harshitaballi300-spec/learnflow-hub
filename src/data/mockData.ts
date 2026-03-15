@@ -483,7 +483,63 @@ export const mockSubjects: Subject[] = [
     language: 'English',
     lastUpdated: '2026-03-08',
   },
-];
+  // Java course (s11)
+  {
+    id: 'sec25', subjectId: 's11', title: 'Java Fundamentals', orderIndex: 1,
+    lessons: [
+      { id: 'v63', sectionId: 'sec25', title: 'Introduction to Java', description: 'JDK setup, first program, and Java ecosystem.', youtubeUrl: 'https://www.youtube.com/watch?v=eIrMbAQSU34', duration: '20:00' },
+      { id: 'v64', sectionId: 'sec25', title: 'OOP in Java', description: 'Classes, objects, inheritance, and interfaces.', youtubeUrl: 'https://www.youtube.com/watch?v=IUqKuGNasdM', duration: '28:30' },
+      { id: 'v65', sectionId: 'sec25', title: 'Collections Framework', description: 'Lists, maps, sets, and iterators.', youtubeUrl: 'https://www.youtube.com/watch?v=GdAon80-0KA', duration: '24:15' },
+    ],
+  },
+  {
+    id: 'sec26', subjectId: 's11', title: 'Spring Boot', orderIndex: 2,
+    lessons: [
+      { id: 'v66', sectionId: 'sec26', title: 'Spring Boot Intro', description: 'Setting up a Spring Boot project.', youtubeUrl: 'https://www.youtube.com/watch?v=9SGDpanrc8U', duration: '22:00' },
+      { id: 'v67', sectionId: 'sec26', title: 'Building REST APIs', description: 'Controllers, services, and repositories.', youtubeUrl: 'https://www.youtube.com/watch?v=4o4Hz4Gv3Xo', duration: '30:00' },
+    ],
+  },
+  // Blockchain course (s12)
+  {
+    id: 'sec27', subjectId: 's12', title: 'Blockchain Basics', orderIndex: 1,
+    lessons: [
+      { id: 'v68', sectionId: 'sec27', title: 'How Blockchain Works', description: 'Distributed ledger and consensus.', youtubeUrl: 'https://www.youtube.com/watch?v=SSo_EIwHSd4', duration: '18:00' },
+      { id: 'v69', sectionId: 'sec27', title: 'Solidity Fundamentals', description: 'Writing your first smart contract.', youtubeUrl: 'https://www.youtube.com/watch?v=gyMwXuJrbJQ', duration: '26:30' },
+      { id: 'v70', sectionId: 'sec27', title: 'Deploy with Hardhat', description: 'Testing and deploying contracts.', youtubeUrl: 'https://www.youtube.com/watch?v=GKJBEhDV1bM', duration: '24:00' },
+    ],
+  },
+  // Digital Marketing (s13)
+  {
+    id: 'sec28', subjectId: 's13', title: 'SEO & Content Marketing', orderIndex: 1,
+    lessons: [
+      { id: 'v71', sectionId: 'sec28', title: 'SEO Fundamentals', description: 'On-page and off-page SEO.', youtubeUrl: 'https://www.youtube.com/watch?v=DvwS7cV9GmQ', duration: '20:00' },
+      { id: 'v72', sectionId: 'sec28', title: 'Keyword Research', description: 'Finding profitable keywords.', youtubeUrl: 'https://www.youtube.com/watch?v=OMJQhJmYJtE', duration: '18:30' },
+      { id: 'v73', sectionId: 'sec28', title: 'Content Strategy', description: 'Creating content that converts.', youtubeUrl: 'https://www.youtube.com/watch?v=M1XHzcnH6J4', duration: '22:00' },
+    ],
+  },
+  {
+    id: 'sec29', subjectId: 's13', title: 'Paid Advertising', orderIndex: 2,
+    lessons: [
+      { id: 'v74', sectionId: 'sec29', title: 'Google Ads Mastery', description: 'PPC campaigns and bidding.', youtubeUrl: 'https://www.youtube.com/watch?v=oQw8pn-xgZY', duration: '25:00' },
+      { id: 'v75', sectionId: 'sec29', title: 'Social Media Ads', description: 'Facebook, Instagram, and LinkedIn ads.', youtubeUrl: 'https://www.youtube.com/watch?v=gC16A7Jzo2Q', duration: '22:15' },
+    ],
+  },
+  // TypeScript course (s14)
+  {
+    id: 'sec30', subjectId: 's14', title: 'Advanced Types', orderIndex: 1,
+    lessons: [
+      { id: 'v76', sectionId: 'sec30', title: 'Generics Deep Dive', description: 'Generic constraints and inference.', youtubeUrl: 'https://www.youtube.com/watch?v=nViEqpgwxHE', duration: '24:00' },
+      { id: 'v77', sectionId: 'sec30', title: 'Utility & Mapped Types', description: 'Partial, Pick, Record, and custom types.', youtubeUrl: 'https://www.youtube.com/watch?v=TtAYoLqU9uQ', duration: '22:30' },
+      { id: 'v78', sectionId: 'sec30', title: 'Conditional Types', description: 'Building type-level logic.', youtubeUrl: 'https://www.youtube.com/watch?v=SbVgPQDealg', duration: '20:00' },
+    ],
+  },
+  {
+    id: 'sec31', subjectId: 's14', title: 'Design Patterns', orderIndex: 2,
+    lessons: [
+      { id: 'v79', sectionId: 'sec31', title: 'Factory & Builder Patterns', description: 'Creational patterns in TypeScript.', youtubeUrl: 'https://www.youtube.com/watch?v=kuirGzhGhR0', duration: '26:00' },
+      { id: 'v80', sectionId: 'sec31', title: 'Observer & Strategy', description: 'Behavioral patterns for scalable code.', youtubeUrl: 'https://www.youtube.com/watch?v=45hpFBbGb4Y', duration: '24:15' },
+    ],
+  },
 
 export const mockSections: Section[] = [
   {
