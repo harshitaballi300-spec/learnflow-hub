@@ -251,14 +251,127 @@ export const mockSubjects: Subject[] = [
     language: 'English',
     lastUpdated: '2026-02-10',
   },
+  {
+    id: 's7',
+    title: 'Docker & Kubernetes: The Complete DevOps Guide',
+    description: 'Master containerization with Docker and orchestration with Kubernetes. Deploy scalable microservices to the cloud.',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=600&h=340&fit=crop',
+    category: 'DevOps',
+    instructor: 'Mark Rivera',
+    totalLessons: 16,
+    totalDuration: '13h 45m',
+    enrolledCount: 14200,
+    createdAt: '2024-05-01',
+    price: 699,
+    originalPrice: 3999,
+    rating: 4.7,
+    reviewCount: 2890,
+    bestseller: false,
+    level: 'Intermediate',
+    whatYouWillLearn: [
+      'Build and manage Docker containers',
+      'Create multi-container apps with Docker Compose',
+      'Deploy apps with Kubernetes clusters',
+      'CI/CD pipelines with GitHub Actions',
+      'Cloud deployment on AWS & GCP',
+      'Monitor and scale microservices',
+    ],
+    requirements: ['Basic Linux command line', 'Some programming experience'],
+    language: 'English',
+    lastUpdated: '2026-02-25',
+  },
+  {
+    id: 's8',
+    title: 'Cybersecurity Fundamentals: Ethical Hacking & Defense',
+    description: 'Learn cybersecurity from scratch — network security, penetration testing, cryptography, and building secure systems.',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&h=340&fit=crop',
+    category: 'Cybersecurity',
+    instructor: 'Dr. Aisha Patel',
+    totalLessons: 18,
+    totalDuration: '15h 20m',
+    enrolledCount: 11500,
+    createdAt: '2024-05-15',
+    price: 849,
+    originalPrice: 4499,
+    rating: 4.8,
+    reviewCount: 2340,
+    bestseller: true,
+    level: 'Beginner',
+    whatYouWillLearn: [
+      'Understand network security fundamentals',
+      'Perform penetration testing with Kali Linux',
+      'Learn cryptography and encryption methods',
+      'Secure web applications against OWASP Top 10',
+      'Incident response and digital forensics',
+      'Build a career in cybersecurity',
+    ],
+    requirements: ['Basic computer networking knowledge', 'Curiosity about security'],
+    language: 'English',
+    lastUpdated: '2026-03-05',
+  },
+  {
+    id: 's9',
+    title: 'iOS & Android App Development with Flutter',
+    description: 'Build beautiful cross-platform mobile apps with Flutter and Dart. Publish to both App Store and Google Play.',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&h=340&fit=crop',
+    category: 'Mobile Development',
+    instructor: 'Emma Torres',
+    totalLessons: 20,
+    totalDuration: '18h 10m',
+    enrolledCount: 13400,
+    createdAt: '2024-06-01',
+    price: 749,
+    originalPrice: 4299,
+    rating: 4.6,
+    reviewCount: 1980,
+    bestseller: false,
+    level: 'Intermediate',
+    whatYouWillLearn: [
+      'Master Dart programming language',
+      'Build responsive UIs with Flutter widgets',
+      'State management with Provider and Riverpod',
+      'Integrate REST APIs and Firebase',
+      'Publish apps to App Store & Google Play',
+      'Implement push notifications and animations',
+    ],
+    requirements: ['Basic programming knowledge', 'A Mac or Windows computer', 'Mobile device for testing'],
+    language: 'English',
+    lastUpdated: '2026-03-10',
+  },
+  {
+    id: 's10',
+    title: 'Cloud Computing with AWS: Solutions Architect Prep',
+    description: 'Comprehensive AWS training covering EC2, S3, Lambda, DynamoDB, and more. Prepare for the Solutions Architect certification.',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&h=340&fit=crop',
+    category: 'Cloud Computing',
+    instructor: 'Prof. James Wu',
+    totalLessons: 22,
+    totalDuration: '20h 30m',
+    enrolledCount: 19800,
+    createdAt: '2024-06-15',
+    price: 999,
+    originalPrice: 5499,
+    rating: 4.8,
+    reviewCount: 4100,
+    bestseller: true,
+    level: 'Intermediate',
+    whatYouWillLearn: [
+      'Core AWS services: EC2, S3, RDS, Lambda',
+      'Design highly available architectures',
+      'Implement security best practices on AWS',
+      'Serverless computing and microservices',
+      'Cost optimization strategies',
+      'Pass the AWS Solutions Architect exam',
+    ],
+    requirements: ['Basic networking knowledge', 'Some programming experience', 'AWS free-tier account'],
+    language: 'English',
+    lastUpdated: '2026-03-12',
+  },
 ];
 
 export const mockSections: Section[] = [
   {
-    id: 'sec1',
-    subjectId: 's1',
-    title: 'Getting Started with Python',
-    orderIndex: 1,
+    id: 'sec1', subjectId: 's1', title: 'Getting Started with Python', orderIndex: 1,
     lessons: [
       { id: 'v1', sectionId: 'sec1', title: 'Introduction to Python', description: 'What is Python and why learn it?', youtubeUrl: 'https://www.youtube.com/watch?v=kqtD5dpn9C8', duration: '15:30' },
       { id: 'v2', sectionId: 'sec1', title: 'Installing Python', description: 'Set up Python on your machine.', youtubeUrl: 'https://www.youtube.com/watch?v=YYXdXT2l-Gg', duration: '12:45' },
@@ -266,10 +379,7 @@ export const mockSections: Section[] = [
     ],
   },
   {
-    id: 'sec2',
-    subjectId: 's1',
-    title: 'Variables & Data Types',
-    orderIndex: 2,
+    id: 'sec2', subjectId: 's1', title: 'Variables & Data Types', orderIndex: 2,
     lessons: [
       { id: 'v4', sectionId: 'sec2', title: 'Variables in Python', description: 'Understanding variables and naming conventions.', youtubeUrl: 'https://www.youtube.com/watch?v=cQT33yu9pY8', duration: '20:10' },
       { id: 'v5', sectionId: 'sec2', title: 'Numbers and Strings', description: 'Working with numeric and string data types.', youtubeUrl: 'https://www.youtube.com/watch?v=khKv-8q7YmY', duration: '25:00' },
@@ -277,10 +387,7 @@ export const mockSections: Section[] = [
     ],
   },
   {
-    id: 'sec3',
-    subjectId: 's1',
-    title: 'Functions & Modules',
-    orderIndex: 3,
+    id: 'sec3', subjectId: 's1', title: 'Functions & Modules', orderIndex: 3,
     lessons: [
       { id: 'v7', sectionId: 'sec3', title: 'Defining Functions', description: 'Create reusable code blocks.', youtubeUrl: 'https://www.youtube.com/watch?v=9Os0o3wzS_I', duration: '28:15' },
       { id: 'v8', sectionId: 'sec3', title: 'Parameters & Return Values', description: 'Passing data to and from functions.', youtubeUrl: 'https://www.youtube.com/watch?v=u-OmVr_fT4s', duration: '19:45' },
@@ -288,14 +395,170 @@ export const mockSections: Section[] = [
     ],
   },
   {
-    id: 'sec4',
-    subjectId: 's1',
-    title: 'Object-Oriented Programming',
-    orderIndex: 4,
+    id: 'sec4', subjectId: 's1', title: 'Object-Oriented Programming', orderIndex: 4,
     lessons: [
       { id: 'v10', sectionId: 'sec4', title: 'Classes and Objects', description: 'Introduction to OOP concepts.', youtubeUrl: 'https://www.youtube.com/watch?v=ZDa-Z5JzLYM', duration: '32:00' },
       { id: 'v11', sectionId: 'sec4', title: 'Inheritance', description: 'Reusing code through class inheritance.', youtubeUrl: 'https://www.youtube.com/watch?v=Cn7AkDb4pIU', duration: '24:30' },
       { id: 'v12', sectionId: 'sec4', title: 'Polymorphism', description: 'Dynamic method dispatch and duck typing.', youtubeUrl: 'https://www.youtube.com/watch?v=LIWpZ_Uf2mU', duration: '20:15' },
+    ],
+  },
+  // React course (s2)
+  {
+    id: 'sec5', subjectId: 's2', title: 'React Fundamentals', orderIndex: 1,
+    lessons: [
+      { id: 'v13', sectionId: 'sec5', title: 'What is React?', description: 'Introduction to React and its ecosystem.', youtubeUrl: 'https://www.youtube.com/watch?v=Tn6-PIqc4UM', duration: '18:00' },
+      { id: 'v14', sectionId: 'sec5', title: 'JSX and Components', description: 'Understanding JSX syntax and component structure.', youtubeUrl: 'https://www.youtube.com/watch?v=9YkUCRhQd9M', duration: '22:15' },
+      { id: 'v15', sectionId: 'sec5', title: 'Props and State', description: 'Passing data and managing component state.', youtubeUrl: 'https://www.youtube.com/watch?v=4ORZ1GmjaMc', duration: '25:30' },
+    ],
+  },
+  {
+    id: 'sec6', subjectId: 's2', title: 'React Hooks Deep Dive', orderIndex: 2,
+    lessons: [
+      { id: 'v16', sectionId: 'sec6', title: 'useState & useEffect', description: 'Core hooks for state and side effects.', youtubeUrl: 'https://www.youtube.com/watch?v=O6P86uwfdR0', duration: '28:00' },
+      { id: 'v17', sectionId: 'sec6', title: 'useContext & useReducer', description: 'Advanced state management hooks.', youtubeUrl: 'https://www.youtube.com/watch?v=5LrDIWkK_Bc', duration: '24:10' },
+      { id: 'v18', sectionId: 'sec6', title: 'Custom Hooks', description: 'Creating reusable hook logic.', youtubeUrl: 'https://www.youtube.com/watch?v=J-g9ZJha8FE', duration: '20:45' },
+    ],
+  },
+  {
+    id: 'sec7', subjectId: 's2', title: 'Redux & State Management', orderIndex: 3,
+    lessons: [
+      { id: 'v19', sectionId: 'sec7', title: 'Redux Toolkit Basics', description: 'Modern Redux with Redux Toolkit.', youtubeUrl: 'https://www.youtube.com/watch?v=9zySeP5vH9c', duration: '30:00' },
+      { id: 'v20', sectionId: 'sec7', title: 'Async Thunks & API Calls', description: 'Handling async operations in Redux.', youtubeUrl: 'https://www.youtube.com/watch?v=93p3LxR9xfM', duration: '26:20' },
+    ],
+  },
+  // DSA course (s3)
+  {
+    id: 'sec8', subjectId: 's3', title: 'Arrays & Strings', orderIndex: 1,
+    lessons: [
+      { id: 'v21', sectionId: 'sec8', title: 'Array Fundamentals', description: 'Understanding arrays and common operations.', youtubeUrl: 'https://www.youtube.com/watch?v=QJNwK2uJyGs', duration: '22:00' },
+      { id: 'v22', sectionId: 'sec8', title: 'Two Pointer Technique', description: 'Solving problems with two pointers.', youtubeUrl: 'https://www.youtube.com/watch?v=On03HWe2tZM', duration: '19:30' },
+      { id: 'v23', sectionId: 'sec8', title: 'Sliding Window', description: 'Efficient subarray processing.', youtubeUrl: 'https://www.youtube.com/watch?v=MK-NZ4hN7rs', duration: '24:15' },
+    ],
+  },
+  {
+    id: 'sec9', subjectId: 's3', title: 'Linked Lists & Stacks', orderIndex: 2,
+    lessons: [
+      { id: 'v24', sectionId: 'sec9', title: 'Singly Linked Lists', description: 'Building and traversing linked lists.', youtubeUrl: 'https://www.youtube.com/watch?v=F8AbOfQwl1c', duration: '26:00' },
+      { id: 'v25', sectionId: 'sec9', title: 'Stack Implementation', description: 'Stacks and real-world use cases.', youtubeUrl: 'https://www.youtube.com/watch?v=KInG04mAjO0', duration: '20:45' },
+    ],
+  },
+  {
+    id: 'sec10', subjectId: 's3', title: 'Trees & Graphs', orderIndex: 3,
+    lessons: [
+      { id: 'v26', sectionId: 'sec10', title: 'Binary Trees', description: 'Tree traversals and properties.', youtubeUrl: 'https://www.youtube.com/watch?v=fAAZixBzIAI', duration: '30:00' },
+      { id: 'v27', sectionId: 'sec10', title: 'Graph BFS & DFS', description: 'Graph traversal algorithms.', youtubeUrl: 'https://www.youtube.com/watch?v=tWVWeAqZ0WU', duration: '28:30' },
+    ],
+  },
+  // ML course (s4)
+  {
+    id: 'sec11', subjectId: 's4', title: 'ML Foundations', orderIndex: 1,
+    lessons: [
+      { id: 'v28', sectionId: 'sec11', title: 'What is Machine Learning?', description: 'Overview of ML types and applications.', youtubeUrl: 'https://www.youtube.com/watch?v=ukzFI9rgwfU', duration: '20:00' },
+      { id: 'v29', sectionId: 'sec11', title: 'Linear Regression', description: 'Your first ML algorithm.', youtubeUrl: 'https://www.youtube.com/watch?v=7ArmBVF2dCs', duration: '25:30' },
+      { id: 'v30', sectionId: 'sec11', title: 'Logistic Regression', description: 'Classification with logistic regression.', youtubeUrl: 'https://www.youtube.com/watch?v=yIYKR4sgzI8', duration: '23:45' },
+    ],
+  },
+  {
+    id: 'sec12', subjectId: 's4', title: 'Neural Networks', orderIndex: 2,
+    lessons: [
+      { id: 'v31', sectionId: 'sec12', title: 'Intro to Neural Networks', description: 'Understanding neurons and layers.', youtubeUrl: 'https://www.youtube.com/watch?v=aircAruvnKk', duration: '28:00' },
+      { id: 'v32', sectionId: 'sec12', title: 'Building with TensorFlow', description: 'Hands-on neural network training.', youtubeUrl: 'https://www.youtube.com/watch?v=tPYj3fFJGjk', duration: '32:15' },
+    ],
+  },
+  // UI/UX course (s5)
+  {
+    id: 'sec13', subjectId: 's5', title: 'Design Principles', orderIndex: 1,
+    lessons: [
+      { id: 'v33', sectionId: 'sec13', title: 'Intro to UI/UX Design', description: 'What makes great design.', youtubeUrl: 'https://www.youtube.com/watch?v=c9Wg6Cb_YlU', duration: '16:00' },
+      { id: 'v34', sectionId: 'sec13', title: 'Color Theory & Typography', description: 'Choosing colors and fonts.', youtubeUrl: 'https://www.youtube.com/watch?v=YqQx75OPRa0', duration: '20:30' },
+      { id: 'v35', sectionId: 'sec13', title: 'Layout & Spacing', description: 'Creating visual hierarchy.', youtubeUrl: 'https://www.youtube.com/watch?v=grV_MBiPOaI', duration: '18:15' },
+    ],
+  },
+  {
+    id: 'sec14', subjectId: 's5', title: 'Figma Mastery', orderIndex: 2,
+    lessons: [
+      { id: 'v36', sectionId: 'sec14', title: 'Figma Basics', description: 'Getting started with Figma.', youtubeUrl: 'https://www.youtube.com/watch?v=FTFaQWZBqQ8', duration: '22:00' },
+      { id: 'v37', sectionId: 'sec14', title: 'Prototyping in Figma', description: 'Interactive prototypes and flows.', youtubeUrl: 'https://www.youtube.com/watch?v=iBkXf6u8Mzc', duration: '25:45' },
+    ],
+  },
+  // SQL course (s6)
+  {
+    id: 'sec15', subjectId: 's6', title: 'SQL Basics', orderIndex: 1,
+    lessons: [
+      { id: 'v38', sectionId: 'sec15', title: 'Introduction to Databases', description: 'Relational database concepts.', youtubeUrl: 'https://www.youtube.com/watch?v=HXV3zeQKqGY', duration: '20:00' },
+      { id: 'v39', sectionId: 'sec15', title: 'SELECT & WHERE', description: 'Querying data from tables.', youtubeUrl: 'https://www.youtube.com/watch?v=nWeW3sCmD2k', duration: '18:30' },
+      { id: 'v40', sectionId: 'sec15', title: 'JOINs Explained', description: 'Combining data from multiple tables.', youtubeUrl: 'https://www.youtube.com/watch?v=9yeOJ0ZMUYw', duration: '24:00' },
+    ],
+  },
+  {
+    id: 'sec16', subjectId: 's6', title: 'Advanced SQL', orderIndex: 2,
+    lessons: [
+      { id: 'v41', sectionId: 'sec16', title: 'Subqueries & CTEs', description: 'Writing complex nested queries.', youtubeUrl: 'https://www.youtube.com/watch?v=m1KcNV-Zhmc', duration: '26:15' },
+      { id: 'v42', sectionId: 'sec16', title: 'Indexes & Performance', description: 'Optimizing query performance.', youtubeUrl: 'https://www.youtube.com/watch?v=BIlFTFGV9yw', duration: '22:30' },
+    ],
+  },
+  // Docker & K8s course (s7)
+  {
+    id: 'sec17', subjectId: 's7', title: 'Docker Fundamentals', orderIndex: 1,
+    lessons: [
+      { id: 'v43', sectionId: 'sec17', title: 'What is Docker?', description: 'Containers vs VMs and Docker basics.', youtubeUrl: 'https://www.youtube.com/watch?v=Gjnup-PuquQ', duration: '18:00' },
+      { id: 'v44', sectionId: 'sec17', title: 'Dockerfile & Images', description: 'Building custom Docker images.', youtubeUrl: 'https://www.youtube.com/watch?v=pTFZFxd4hOI', duration: '24:30' },
+      { id: 'v45', sectionId: 'sec17', title: 'Docker Compose', description: 'Multi-container applications.', youtubeUrl: 'https://www.youtube.com/watch?v=HG6yIjZapSA', duration: '22:00' },
+    ],
+  },
+  {
+    id: 'sec18', subjectId: 's7', title: 'Kubernetes Essentials', orderIndex: 2,
+    lessons: [
+      { id: 'v46', sectionId: 'sec18', title: 'Kubernetes Architecture', description: 'Pods, nodes, and clusters.', youtubeUrl: 'https://www.youtube.com/watch?v=X48VuDVv0do', duration: '28:00' },
+      { id: 'v47', sectionId: 'sec18', title: 'Deployments & Services', description: 'Deploying and exposing apps.', youtubeUrl: 'https://www.youtube.com/watch?v=EQNO_kM96Mo', duration: '26:15' },
+    ],
+  },
+  // Cybersecurity course (s8)
+  {
+    id: 'sec19', subjectId: 's8', title: 'Security Fundamentals', orderIndex: 1,
+    lessons: [
+      { id: 'v48', sectionId: 'sec19', title: 'Cybersecurity Overview', description: 'Threats, vulnerabilities, and defense.', youtubeUrl: 'https://www.youtube.com/watch?v=inWWhr5tnEA', duration: '20:00' },
+      { id: 'v49', sectionId: 'sec19', title: 'Network Security Basics', description: 'Firewalls, VPNs, and protocols.', youtubeUrl: 'https://www.youtube.com/watch?v=E03gh1huvW4', duration: '22:30' },
+      { id: 'v50', sectionId: 'sec19', title: 'Cryptography Essentials', description: 'Encryption, hashing, and PKI.', youtubeUrl: 'https://www.youtube.com/watch?v=jhXCTbFnK8o', duration: '25:00' },
+    ],
+  },
+  {
+    id: 'sec20', subjectId: 's8', title: 'Penetration Testing', orderIndex: 2,
+    lessons: [
+      { id: 'v51', sectionId: 'sec20', title: 'Kali Linux Setup', description: 'Setting up your hacking lab.', youtubeUrl: 'https://www.youtube.com/watch?v=lZAoFs75_cs', duration: '18:45' },
+      { id: 'v52', sectionId: 'sec20', title: 'Web App Pentesting', description: 'Finding and exploiting web vulnerabilities.', youtubeUrl: 'https://www.youtube.com/watch?v=2_lswM1S264', duration: '30:00' },
+    ],
+  },
+  // Flutter course (s9)
+  {
+    id: 'sec21', subjectId: 's9', title: 'Dart & Flutter Basics', orderIndex: 1,
+    lessons: [
+      { id: 'v53', sectionId: 'sec21', title: 'Dart Language Tour', description: 'Variables, functions, and OOP in Dart.', youtubeUrl: 'https://www.youtube.com/watch?v=Ej_Pcr4uC2Q', duration: '24:00' },
+      { id: 'v54', sectionId: 'sec21', title: 'Flutter Widgets', description: 'Building UIs with Flutter widgets.', youtubeUrl: 'https://www.youtube.com/watch?v=1ukSR1GRtMU', duration: '26:30' },
+      { id: 'v55', sectionId: 'sec21', title: 'Layouts & Navigation', description: 'Rows, columns, and routing.', youtubeUrl: 'https://www.youtube.com/watch?v=b2fgMCeSNpY', duration: '22:15' },
+    ],
+  },
+  {
+    id: 'sec22', subjectId: 's9', title: 'State & APIs', orderIndex: 2,
+    lessons: [
+      { id: 'v56', sectionId: 'sec22', title: 'State Management', description: 'Provider and Riverpod patterns.', youtubeUrl: 'https://www.youtube.com/watch?v=d_m5csmrf7I', duration: '28:00' },
+      { id: 'v57', sectionId: 'sec22', title: 'REST API Integration', description: 'Fetching and displaying remote data.', youtubeUrl: 'https://www.youtube.com/watch?v=c09XiwOZKsI', duration: '25:45' },
+    ],
+  },
+  // AWS course (s10)
+  {
+    id: 'sec23', subjectId: 's10', title: 'AWS Core Services', orderIndex: 1,
+    lessons: [
+      { id: 'v58', sectionId: 'sec23', title: 'AWS Overview & IAM', description: 'AWS global infrastructure and identity management.', youtubeUrl: 'https://www.youtube.com/watch?v=ulprqHHWlng', duration: '22:00' },
+      { id: 'v59', sectionId: 'sec23', title: 'EC2 & Networking', description: 'Virtual servers and VPC setup.', youtubeUrl: 'https://www.youtube.com/watch?v=iHX-jtKIVNA', duration: '28:30' },
+      { id: 'v60', sectionId: 'sec23', title: 'S3 & Storage', description: 'Object storage and lifecycle policies.', youtubeUrl: 'https://www.youtube.com/watch?v=77lMCiiMilo', duration: '20:00' },
+    ],
+  },
+  {
+    id: 'sec24', subjectId: 's10', title: 'Serverless & Architecture', orderIndex: 2,
+    lessons: [
+      { id: 'v61', sectionId: 'sec24', title: 'Lambda & API Gateway', description: 'Building serverless APIs.', youtubeUrl: 'https://www.youtube.com/watch?v=97q30JjEq9Y', duration: '26:15' },
+      { id: 'v62', sectionId: 'sec24', title: 'Architecture Best Practices', description: 'Well-Architected Framework deep dive.', youtubeUrl: 'https://www.youtube.com/watch?v=i_2_bmIVpSI', duration: '30:00' },
     ],
   },
 ];
