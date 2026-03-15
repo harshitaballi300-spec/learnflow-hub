@@ -13,6 +13,7 @@ import LessonPage from "./pages/LessonPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
+import ProfilePage from "./pages/ProfilePage";
 import AdminPage from "./pages/AdminPage";
 import CartPage from "./pages/CartPage";
 import PaymentPage from "./pages/PaymentPage";
@@ -36,6 +37,7 @@ const App = () => (
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="/admin" element={<AdminPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/payment" element={<PaymentPage />} />
