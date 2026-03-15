@@ -367,6 +367,41 @@ export const mockSubjects: Subject[] = [
     language: 'English',
     lastUpdated: '2026-03-12',
   },
+];
+
+export const mockSections: Section[] = [
+  {
+    id: 'sec1', subjectId: 's1', title: 'Getting Started with Python', orderIndex: 1,
+    lessons: [
+      { id: 'v1', sectionId: 'sec1', title: 'Introduction to Python', description: 'What is Python and why learn it?', youtubeUrl: 'https://www.youtube.com/watch?v=kqtD5dpn9C8', duration: '15:30' },
+      { id: 'v2', sectionId: 'sec1', title: 'Installing Python', description: 'Set up Python on your machine.', youtubeUrl: 'https://www.youtube.com/watch?v=YYXdXT2l-Gg', duration: '12:45' },
+      { id: 'v3', sectionId: 'sec1', title: 'Your First Program', description: 'Write and run Hello World.', youtubeUrl: 'https://www.youtube.com/watch?v=hEgO047GxaQ', duration: '18:20' },
+    ],
+  },
+  {
+    id: 'sec2', subjectId: 's1', title: 'Variables & Data Types', orderIndex: 2,
+    lessons: [
+      { id: 'v4', sectionId: 'sec2', title: 'Variables in Python', description: 'Understanding variables and naming conventions.', youtubeUrl: 'https://www.youtube.com/watch?v=cQT33yu9pY8', duration: '20:10' },
+      { id: 'v5', sectionId: 'sec2', title: 'Numbers and Strings', description: 'Working with numeric and string data types.', youtubeUrl: 'https://www.youtube.com/watch?v=khKv-8q7YmY', duration: '25:00' },
+      { id: 'v6', sectionId: 'sec2', title: 'Lists and Tuples', description: 'Sequential data structures in Python.', youtubeUrl: 'https://www.youtube.com/watch?v=W8KRzm-HUcc', duration: '22:30' },
+    ],
+  },
+  {
+    id: 'sec3', subjectId: 's1', title: 'Functions & Modules', orderIndex: 3,
+    lessons: [
+      { id: 'v7', sectionId: 'sec3', title: 'Defining Functions', description: 'Create reusable code blocks.', youtubeUrl: 'https://www.youtube.com/watch?v=9Os0o3wzS_I', duration: '28:15' },
+      { id: 'v8', sectionId: 'sec3', title: 'Parameters & Return Values', description: 'Passing data to and from functions.', youtubeUrl: 'https://www.youtube.com/watch?v=u-OmVr_fT4s', duration: '19:45' },
+      { id: 'v9', sectionId: 'sec3', title: 'Importing Modules', description: 'Using built-in and third-party modules.', youtubeUrl: 'https://www.youtube.com/watch?v=1RuMJ53CKds', duration: '16:50' },
+    ],
+  },
+  {
+    id: 'sec4', subjectId: 's1', title: 'Object-Oriented Programming', orderIndex: 4,
+    lessons: [
+      { id: 'v10', sectionId: 'sec4', title: 'Classes and Objects', description: 'Introduction to OOP concepts.', youtubeUrl: 'https://www.youtube.com/watch?v=ZDa-Z5JzLYM', duration: '32:00' },
+      { id: 'v11', sectionId: 'sec4', title: 'Inheritance', description: 'Reusing code through class inheritance.', youtubeUrl: 'https://www.youtube.com/watch?v=Cn7AkDb4pIU', duration: '24:30' },
+      { id: 'v12', sectionId: 'sec4', title: 'Polymorphism', description: 'Dynamic method dispatch and duck typing.', youtubeUrl: 'https://www.youtube.com/watch?v=LIWpZ_Uf2mU', duration: '20:15' },
+    ],
+  },
   // React course (s2)
   {
     id: 'sec5', subjectId: 's2', title: 'React Fundamentals', orderIndex: 1,
