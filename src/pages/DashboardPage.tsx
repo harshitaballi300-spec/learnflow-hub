@@ -3,8 +3,9 @@ import { useCart } from '@/contexts/CartContext';
 import { mockSections, completedLessonIds } from '@/data/mockData';
 import ProgressBar from '@/components/ProgressBar';
 import { Link, Navigate } from 'react-router-dom';
-import { BookOpen, Clock, PlayCircle, TrendingUp } from 'lucide-react';
+import { BookOpen, Clock, PlayCircle, TrendingUp, Award, GraduationCap, ChevronRight, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const DashboardPage = () => {
   const { user } = useAuth();
@@ -14,90 +15,197 @@ const DashboardPage = () => {
 
   const purchasedSubjects = getPurchasedSubjects();
   const totalCompleted = completedLessonIds.size;
-  const totalLessons = mockSections.flatMap(s => s.lessons).length;
+  const totalLessons = purchasedSubjects.length > 0
+    ? mockSections.filter(s => purchasedSubjects.some(p => p.id === s.subjectId)).flatMap(s => s.lessons).length
+    : 0;
 
-    const purchasedIds = purchasedSubjects.map(s => s.id);
-    const purchasedSections = mockSections.filter(s => purchasedIds.includes(s.subjectId));
-    const allLessons = purchasedSections.flatMap(s => s.lessons);
-    const nextLesson = allLessons.find(l => !completedLessonIds.has(l.id));
-    const nextLessonSubjectId = nextLesson
-      ? purchasedSections.find(s => s.lessons.some(l => l.id === nextLesson.id))?.subjectId
-      : undefined;
+  const purchasedIds = purchasedSubjects.map(s => s.id);
+  const purchasedSections = mockSections.filter(s => purchasedIds.includes(s.subjectId));
+  const allLessons = purchasedSections.flatMap(s => s.lessons);
+  const nextLesson = allLessons.find(l => !completedLessonIds.has(l.id));
+  const nextLessonSubjectId = nextLesson
+    ? purchasedSections.find(s => s.lessons.some(l => l.id === nextLesson.id))?.subjectId
+    : undefined;
+  const nextCourse = nextLessonSubjectId ? purchasedSubjects.find(s => s.id === nextLessonSubjectId) : undefined;
+
+  const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
-      <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold">Welcome back, {user.name}!</h1>
-        <p className="mt-1 text-muted-foreground">Continue where you left off</p>
-      </div>
-
-      {/* Stats */}
-      <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          { icon: BookOpen, label: 'Enrolled Courses', value: purchasedSubjects.length, color: 'text-primary' },
-          { icon: PlayCircle, label: 'Lessons Completed', value: totalCompleted, color: 'text-green-600' },
-          { icon: TrendingUp, label: 'Overall Progress', value: totalLessons > 0 ? `${Math.round((totalCompleted / totalLessons) * 100)}%` : '0%', color: 'text-secondary' },
-          { icon: Clock, label: 'Hours Learned', value: '24h', color: 'text-accent' },
-        ].map(stat => (
-          <div key={stat.label} className="glass-card flex items-center gap-4 rounded-xl p-5">
-            <div className={`flex h-11 w-11 items-center justify-center rounded-lg bg-muted ${stat.color}`}>
-              <stat.icon className="h-5 w-5" />
+    <div className="min-h-screen bg-background">
+      {/* Welcome banner */}
+      <div className="bg-sidebar text-sidebar-foreground">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-4">
+              <Avatar className="h-16 w-16 border-2 border-sidebar-primary">
+                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarFallback className="gradient-primary text-xl font-bold text-primary-foreground">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <h1 className="font-display text-2xl font-bold sm:text-3xl">Welcome back, {user.name}!</h1>
+                <p className="text-sidebar-foreground/60">{user.email} · {purchasedSubjects.length} course{purchasedSubjects.length !== 1 ? 's' : ''} enrolled</p>
+              </div>
             </div>
-            <div>
-              <p className="font-display text-2xl font-bold">{stat.value}</p>
-              <p className="text-sm text-muted-foreground">{stat.label}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Continue Watching */}
-      {nextLesson && purchasedSubjects.length > 0 && (
-        <div className="mb-10">
-          <h2 className="mb-4 font-display text-xl font-bold">Continue Watching</h2>
-          <div className="glass-card flex flex-col items-start gap-4 rounded-xl p-5 sm:flex-row sm:items-center">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl gradient-primary">
-              <PlayCircle className="h-7 w-7 text-primary-foreground" />
-            </div>
-            <div className="flex-1">
-              <h3 className="font-display font-semibold">{nextLesson.title}</h3>
-              <p className="text-sm text-muted-foreground">{nextLesson.description}</p>
-            </div>
-            <Link to={`/courses/${nextLessonSubjectId}/lesson/${nextLesson.id}`}>
-              <Button className="gradient-primary border-0 text-primary-foreground">Resume</Button>
+            <Link to="/profile">
+              <Button variant="outline" size="sm" className="border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent">
+                Edit Profile
+              </Button>
             </Link>
           </div>
         </div>
-      )}
+      </div>
 
-      {/* My Learning */}
-      <h2 className="mb-4 font-display text-xl font-bold">My Learning</h2>
-      {purchasedSubjects.length > 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {purchasedSubjects.map(subject => (
-            <Link key={subject.id} to={`/courses/${subject.id}`} className="glass-card group rounded-xl p-5 transition-all hover:shadow-md">
-              <div className="mb-3 flex items-start justify-between">
-                <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
-                  {subject.category}
-                </span>
-                <span className="text-xs text-muted-foreground">{subject.totalLessons} lessons</span>
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+        {/* Stats */}
+        <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { icon: BookOpen, label: 'Enrolled Courses', value: purchasedSubjects.length, color: 'text-primary', bg: 'bg-primary/10' },
+            { icon: PlayCircle, label: 'Lessons Completed', value: totalCompleted, color: 'text-secondary', bg: 'bg-secondary/10' },
+            { icon: TrendingUp, label: 'Overall Progress', value: totalLessons > 0 ? `${Math.round((totalCompleted / totalLessons) * 100)}%` : '0%', color: 'text-accent', bg: 'bg-accent/10' },
+            { icon: Award, label: 'Certificates', value: 0, color: 'text-destructive', bg: 'bg-destructive/10' },
+          ].map(stat => (
+            <div key={stat.label} className="glass-card flex items-center gap-4 rounded-xl p-5 transition-all hover:shadow-md">
+              <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${stat.bg} ${stat.color}`}>
+                <stat.icon className="h-6 w-6" />
               </div>
-              <h3 className="font-display font-semibold group-hover:text-primary transition-colors">{subject.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">by {subject.instructor}</p>
-              <div className="mt-4">
-                <ProgressBar value={0} size="sm" />
+              <div>
+                <p className="font-display text-2xl font-bold">{stat.value}</p>
+                <p className="text-sm text-muted-foreground">{stat.label}</p>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
-      ) : (
-        <div className="glass-card rounded-xl p-10 text-center">
-          <p className="text-muted-foreground">You haven't purchased any courses yet.</p>
-          <Link to="/courses">
-            <Button className="mt-4 gradient-primary border-0 text-primary-foreground">Browse Courses</Button>
-          </Link>
+
+        {/* Continue Watching */}
+        {nextLesson && nextCourse && (
+          <div className="mb-8">
+            <h2 className="mb-4 font-display text-xl font-bold flex items-center gap-2">
+              <PlayCircle className="h-5 w-5 text-primary" />
+              Continue Watching
+            </h2>
+            <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+              <div className="flex flex-col sm:flex-row">
+                <div className="relative aspect-video sm:w-72 sm:flex-shrink-0">
+                  <img src={nextCourse.thumbnailUrl} alt={nextCourse.title} className="h-full w-full object-cover" />
+                  <div className="absolute inset-0 flex items-center justify-center bg-sidebar/40">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-card/90 shadow-lg">
+                      <PlayCircle className="h-7 w-7 text-primary" />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-1 flex-col justify-between p-5">
+                  <div>
+                    <p className="text-xs font-medium text-primary">{nextCourse.title}</p>
+                    <h3 className="mt-1 font-display text-lg font-semibold">{nextLesson.title}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">{nextLesson.description}</p>
+                  </div>
+                  <div className="mt-4 flex items-center gap-3">
+                    <Link to={`/courses/${nextLessonSubjectId}/lesson/${nextLesson.id}`}>
+                      <Button className="gradient-primary border-0 text-primary-foreground">
+                        <PlayCircle className="mr-2 h-4 w-4" />Resume Lesson
+                      </Button>
+                    </Link>
+                    <span className="text-xs text-muted-foreground flex items-center gap-1">
+                      <Clock className="h-3.5 w-3.5" />{nextLesson.duration}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* My Learning */}
+        <div className="mb-8">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="font-display text-xl font-bold flex items-center gap-2">
+              <GraduationCap className="h-5 w-5 text-primary" />
+              My Learning
+              {purchasedSubjects.length > 0 && (
+                <span className="ml-2 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary">
+                  {purchasedSubjects.length}
+                </span>
+              )}
+            </h2>
+            <Link to="/courses">
+              <Button variant="ghost" size="sm" className="text-primary">
+                Browse More <ChevronRight className="ml-1 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+
+          {purchasedSubjects.length > 0 ? (
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {purchasedSubjects.map(subject => {
+                const sections = mockSections.filter(s => s.subjectId === subject.id);
+                const lessons = sections.flatMap(s => s.lessons);
+                const completed = lessons.filter(l => completedLessonIds.has(l.id)).length;
+                const progress = lessons.length > 0 ? Math.round((completed / lessons.length) * 100) : 0;
+                const firstLesson = lessons[0];
+
+                return (
+                  <div key={subject.id} className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:shadow-lg">
+                    <div className="relative aspect-video overflow-hidden">
+                      <img src={subject.thumbnailUrl} alt={subject.title} className="h-full w-full object-cover transition-transform group-hover:scale-105" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-sidebar/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <Link to={firstLesson ? `/courses/${subject.id}/lesson/${firstLesson.id}` : `/courses/${subject.id}`}>
+                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-card/90 shadow-lg">
+                            <PlayCircle className="h-6 w-6 text-primary" />
+                          </div>
+                        </Link>
+                      </div>
+                      {subject.bestseller && (
+                        <span className="absolute left-2 top-2 rounded bg-accent px-2 py-0.5 text-xs font-bold text-accent-foreground">
+                          Bestseller
+                        </span>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <Link to={`/courses/${subject.id}`}>
+                        <h3 className="font-display font-semibold leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                          {subject.title}
+                        </h3>
+                      </Link>
+                      <p className="mt-1 text-xs text-muted-foreground">{subject.instructor}</p>
+                      <div className="mt-1 flex items-center gap-1 text-xs">
+                        <Star className="h-3 w-3 fill-accent text-accent" />
+                        <span className="font-medium">{subject.rating}</span>
+                        <span className="text-muted-foreground">· {lessons.length} lessons</span>
+                      </div>
+                      <div className="mt-3">
+                        <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
+                          <span>{completed}/{lessons.length} lessons</span>
+                          <span className="font-medium text-foreground">{progress}%</span>
+                        </div>
+                        <ProgressBar value={progress} size="sm" />
+                      </div>
+                      <Link to={firstLesson ? `/courses/${subject.id}/lesson/${firstLesson.id}` : `/courses/${subject.id}`}>
+                        <Button size="sm" variant="ghost" className="mt-3 w-full text-primary hover:bg-primary/5">
+                          {progress > 0 ? 'Continue Learning' : 'Start Course'}
+                          <ChevronRight className="ml-1 h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="rounded-xl border-2 border-dashed border-border bg-muted/30 p-12 text-center">
+              <GraduationCap className="mx-auto h-12 w-12 text-muted-foreground/50" />
+              <h3 className="mt-4 font-display text-lg font-semibold">No courses yet</h3>
+              <p className="mt-1 text-muted-foreground">Start your learning journey by exploring our course catalog.</p>
+              <Link to="/courses">
+                <Button className="mt-5 gradient-primary border-0 text-primary-foreground">
+                  Browse Courses
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

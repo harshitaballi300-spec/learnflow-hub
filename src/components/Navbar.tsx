@@ -1,8 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
-import { BookOpen, LayoutDashboard, LogOut, Menu, Shield, ShoppingCart, X } from 'lucide-react';
+import { BookOpen, LayoutDashboard, LogOut, Menu, Shield, ShoppingCart, X, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
 
 const Navbar = () => {
@@ -15,6 +19,8 @@ const Navbar = () => {
     logout();
     navigate('/');
   };
+
+  const initials = user?.name?.split(' ').map(n => n[0]).join('').toUpperCase() || '';
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border bg-card/90 backdrop-blur-md">
@@ -55,15 +61,33 @@ const Navbar = () => {
                   )}
                 </Button>
               </Link>
-              <div className="ml-2 flex items-center gap-2 rounded-full bg-muted px-3 py-1.5">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground">
-                  {user.name.charAt(0)}
-                </div>
-                <span className="text-sm font-medium">{user.name}</span>
-              </div>
-              <Button variant="ghost" size="sm" onClick={handleLogout}>
-                <LogOut className="h-4 w-4" />
-              </Button>
+
+              {/* User dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="ml-2 flex items-center gap-2 rounded-full bg-muted px-3 py-1.5 hover:bg-muted/80 transition-colors outline-none">
+                    <Avatar className="h-7 w-7">
+                      <AvatarImage src={user.avatar} />
+                      <AvatarFallback className="gradient-primary text-xs font-bold text-primary-foreground">
+                        {initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm font-medium">{user.name}</span>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                    <LayoutDashboard className="mr-2 h-4 w-4" />Dashboard
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/profile')}>
+                    <User className="mr-2 h-4 w-4" />Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
+                    <LogOut className="mr-2 h-4 w-4" />Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </>
           ) : (
             <>
@@ -97,6 +121,9 @@ const Navbar = () => {
                 <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start">My Learning</Button>
                 </Link>
+                <Link to="/profile" onClick={() => setMobileOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start">Profile</Button>
+                </Link>
                 <Link to="/cart" onClick={() => setMobileOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start">
                     Cart {cartCount > 0 && `(${cartCount})`}
@@ -110,8 +137,8 @@ const Navbar = () => {
                 <div className="px-4 py-2 text-sm text-muted-foreground">
                   Signed in as <span className="font-medium text-foreground">{user.name}</span>
                 </div>
-                <Button variant="ghost" className="w-full justify-start" onClick={() => { handleLogout(); setMobileOpen(false); }}>
-                  Log out
+                <Button variant="ghost" className="w-full justify-start text-destructive" onClick={() => { handleLogout(); setMobileOpen(false); }}>
+                  <LogOut className="mr-2 h-4 w-4" />Log out
                 </Button>
               </>
             ) : (
