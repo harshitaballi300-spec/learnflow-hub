@@ -63,7 +63,7 @@ const DashboardPage = () => {
               <h3 className="font-display font-semibold">{nextLesson.title}</h3>
               <p className="text-sm text-muted-foreground">{nextLesson.description}</p>
             </div>
-            <Link to={`/courses/s1/lesson/${nextLesson.id}`}>
+            <Link to={`/courses/${nextLessonSubjectId}/lesson/${nextLesson.id}`}>
               <Button className="gradient-primary border-0 text-primary-foreground">Resume</Button>
             </Link>
           </div>
