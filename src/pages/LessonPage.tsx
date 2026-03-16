@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { mockSections, mockSubjects } from '@/data/mockData';
 import { useCompletion } from '@/contexts/CompletionContext';
 import VideoPlayer from '@/components/VideoPlayer';
-import { CheckCircle2, ChevronLeft, ChevronRight, PlayCircle, Award } from 'lucide-react';
+import QuizModal from '@/components/QuizModal';
+import { CheckCircle2, ChevronLeft, ChevronRight, PlayCircle, Award, FileQuestion } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
