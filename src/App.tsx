@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
+import { CompletionProvider } from "@/contexts/CompletionContext";
 import Navbar from "@/components/Navbar";
 import AIChatbot from "@/components/AIChatbot";
 import HomePage from "./pages/HomePage";
@@ -17,6 +18,7 @@ import ProfilePage from "./pages/ProfilePage";
 import AdminPage from "./pages/AdminPage";
 import CartPage from "./pages/CartPage";
 import PaymentPage from "./pages/PaymentPage";
+import CertificatePage from "./pages/CertificatePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,22 +30,25 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <CartProvider>
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/courses" element={<CoursesPage />} />
-              <Route path="/courses/:id" element={<CourseDetailPage />} />
-              <Route path="/courses/:id/lesson/:lessonId" element={<LessonPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/payment" element={<PaymentPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <AIChatbot />
+            <CompletionProvider>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/courses" element={<CoursesPage />} />
+                <Route path="/courses/:id" element={<CourseDetailPage />} />
+                <Route path="/courses/:id/lesson/:lessonId" element={<LessonPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/admin" element={<AdminPage />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/payment" element={<PaymentPage />} />
+                <Route path="/certificate/:id" element={<CertificatePage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <AIChatbot />
+            </CompletionProvider>
           </CartProvider>
         </AuthProvider>
       </BrowserRouter>

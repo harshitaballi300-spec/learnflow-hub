@@ -1,5 +1,5 @@
 import { Section } from '@/types/lms';
-import { completedLessonIds } from '@/data/mockData';
+import { useCompletion } from '@/contexts/CompletionContext';
 import { ChevronDown, CheckCircle2, PlayCircle } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -12,7 +12,8 @@ interface SectionAccordionProps {
 
 const SectionAccordion = ({ section, subjectId, isEnrolled }: SectionAccordionProps) => {
   const [open, setOpen] = useState(section.orderIndex === 1);
-  const completedCount = section.lessons.filter(l => completedLessonIds.has(l.id)).length;
+  const { isLessonCompleted } = useCompletion();
+  const completedCount = section.lessons.filter(l => isLessonCompleted(l.id)).length;
 
   return (
     <div className="glass-card overflow-hidden rounded-xl">
@@ -37,7 +38,7 @@ const SectionAccordion = ({ section, subjectId, isEnrolled }: SectionAccordionPr
       {open && (
         <div className="border-t border-border">
           {section.lessons.map((lesson, i) => {
-            const isCompleted = completedLessonIds.has(lesson.id);
+            const isCompleted = isLessonCompleted(lesson.id);
             return (
               <div key={lesson.id} className={`flex items-center gap-3 px-4 py-3 ${i > 0 ? 'border-t border-border/50' : ''}`}>
                 {isCompleted ? (
