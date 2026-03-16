@@ -1,13 +1,16 @@
+import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { mockSections, mockSubjects } from '@/data/mockData';
 import { useCompletion } from '@/contexts/CompletionContext';
 import VideoPlayer from '@/components/VideoPlayer';
-import { CheckCircle2, ChevronLeft, ChevronRight, PlayCircle, Award } from 'lucide-react';
+import QuizModal from '@/components/QuizModal';
+import { CheckCircle2, ChevronLeft, ChevronRight, PlayCircle, Award, FileQuestion } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
 const LessonPage = () => {
   const { id: subjectId, lessonId } = useParams<{ id: string; lessonId: string }>();
+  const [quizOpen, setQuizOpen] = useState(false);
   const subject = mockSubjects.find(s => s.id === subjectId);
   const sections = mockSections.filter(s => s.subjectId === subjectId);
   const allLessons = sections.flatMap(s => s.lessons);
@@ -52,20 +55,34 @@ const LessonPage = () => {
                 <CheckCircle2 className="mr-2 h-4 w-4" />Mark as Complete
               </Button>
             ) : (
-              <div className="flex items-center gap-2 rounded-lg bg-success/10 px-4 py-2 text-success">
-                <CheckCircle2 className="h-5 w-5" />
-                <span className="font-medium">Completed</span>
-              </div>
-            )}
+              <>
+                <div className="flex items-center gap-2 rounded-lg bg-success/10 px-4 py-2 text-success">
+                  <CheckCircle2 className="h-5 w-5" />
+                  <span className="font-medium">Completed</span>
+                </div>
 
-            {courseCompleted && (
-              <Link to={`/certificate/${subjectId}`}>
-                <Button variant="outline" className="gap-2 border-accent text-accent hover:bg-accent/10">
-                  <Award className="h-4 w-4" />View Certificate
-                </Button>
-              </Link>
+                {courseCompleted && (
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Link to={`/certificate/${subjectId}`}>
+                      <Button variant="outline" className="gap-2 border-accent text-accent hover:bg-accent/10">
+                        <Award className="h-4 w-4" />View Certificate
+                      </Button>
+                    </Link>
+                    <Button onClick={() => setQuizOpen(true)} variant="outline" className="gap-2 border-primary text-primary hover:bg-primary/10">
+                      <FileQuestion className="h-4 w-4" />Start Quiz
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
           </div>
+
+          <QuizModal
+            open={quizOpen}
+            onOpenChange={setQuizOpen}
+            subjectId={subjectId || ''}
+            courseName={subject.title}
+          />
 
           {/* Course progress bar */}
           <div className="mt-4 rounded-lg border border-border bg-card p-3">
