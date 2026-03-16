@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 
 const LessonPage = () => {
   const { id: subjectId, lessonId } = useParams<{ id: string; lessonId: string }>();
+  const [quizOpen, setQuizOpen] = useState(false);
   const subject = mockSubjects.find(s => s.id === subjectId);
   const sections = mockSections.filter(s => s.subjectId === subjectId);
   const allLessons = sections.flatMap(s => s.lessons);
