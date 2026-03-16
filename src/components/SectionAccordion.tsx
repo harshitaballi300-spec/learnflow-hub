@@ -12,7 +12,8 @@ interface SectionAccordionProps {
 
 const SectionAccordion = ({ section, subjectId, isEnrolled }: SectionAccordionProps) => {
   const [open, setOpen] = useState(section.orderIndex === 1);
-  const completedCount = section.lessons.filter(l => completedLessonIds.has(l.id)).length;
+  const { isLessonCompleted } = useCompletion();
+  const completedCount = section.lessons.filter(l => isLessonCompleted(l.id)).length;
 
   return (
     <div className="glass-card overflow-hidden rounded-xl">
