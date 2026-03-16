@@ -1,5 +1,5 @@
 import { Section } from '@/types/lms';
-import { completedLessonIds } from '@/data/mockData';
+import { useCompletion } from '@/contexts/CompletionContext';
 import { ChevronDown, CheckCircle2, PlayCircle } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
