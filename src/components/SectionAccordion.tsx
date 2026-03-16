@@ -38,7 +38,7 @@ const SectionAccordion = ({ section, subjectId, isEnrolled }: SectionAccordionPr
       {open && (
         <div className="border-t border-border">
           {section.lessons.map((lesson, i) => {
-            const isCompleted = completedLessonIds.has(lesson.id);
+            const isCompleted = isLessonCompleted(lesson.id);
             return (
               <div key={lesson.id} className={`flex items-center gap-3 px-4 py-3 ${i > 0 ? 'border-t border-border/50' : ''}`}>
                 {isCompleted ? (
