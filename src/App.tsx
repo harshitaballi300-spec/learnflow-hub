@@ -20,6 +20,7 @@ import AdminPage from "./pages/AdminPage";
 import CartPage from "./pages/CartPage";
 import PaymentPage from "./pages/PaymentPage";
 import CertificatePage from "./pages/CertificatePage";
+import WishlistPage from "./pages/WishlistPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
