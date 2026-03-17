@@ -255,6 +255,16 @@ const CourseDetailPage = () => {
                       )}
                     </div>
 
+                    <button
+                      onClick={() => {
+                        toggleWishlist(subject.id);
+                        toast.success(wishlisted ? 'Removed from wishlist' : 'Added to wishlist');
+                      }}
+                      className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-border py-2.5 text-sm font-bold transition-colors hover:bg-muted"
+                    >
+                      <Heart className={`h-4 w-4 ${wishlisted ? 'fill-destructive text-destructive' : ''}`} />
+                      {wishlisted ? 'Wishlisted' : 'Add to Wishlist'}
+                    </button>
                     <p className="mt-3 text-center text-xs text-muted-foreground">30-Day Money-Back Guarantee</p>
 
                     {/* This course includes */}

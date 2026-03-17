@@ -53,6 +53,7 @@ const App = () => (
               </Routes>
               <AIChatbot />
             </CompletionProvider>
+            </WishlistProvider>
           </CartProvider>
         </AuthProvider>
       </BrowserRouter>

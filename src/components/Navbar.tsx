@@ -136,6 +136,11 @@ const Navbar = () => {
                 <Link to="/profile" onClick={() => setMobileOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start">Profile</Button>
                 </Link>
+                <Link to="/wishlist" onClick={() => setMobileOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start">
+                    <Heart className="mr-2 h-4 w-4" />Wishlist {wishlistCount > 0 && `(${wishlistCount})`}
+                  </Button>
+                </Link>
                 <Link to="/cart" onClick={() => setMobileOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start">
                     Cart {cartCount > 0 && `(${cartCount})`}
