@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
+import { WishlistProvider } from "@/contexts/WishlistContext";
 import { CompletionProvider } from "@/contexts/CompletionContext";
 import Navbar from "@/components/Navbar";
 import AIChatbot from "@/components/AIChatbot";
@@ -19,6 +20,7 @@ import AdminPage from "./pages/AdminPage";
 import CartPage from "./pages/CartPage";
 import PaymentPage from "./pages/PaymentPage";
 import CertificatePage from "./pages/CertificatePage";
+import WishlistPage from "./pages/WishlistPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +32,7 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <CartProvider>
+            <WishlistProvider>
             <CompletionProvider>
               <Navbar />
               <Routes>
@@ -45,10 +48,12 @@ const App = () => (
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/payment" element={<PaymentPage />} />
                 <Route path="/certificate/:id" element={<CertificatePage />} />
+                <Route path="/wishlist" element={<WishlistPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <AIChatbot />
             </CompletionProvider>
+            </WishlistProvider>
           </CartProvider>
         </AuthProvider>
       </BrowserRouter>

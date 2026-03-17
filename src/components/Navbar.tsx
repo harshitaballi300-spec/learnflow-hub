@@ -1,7 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
-import { BookOpen, LayoutDashboard, LogOut, Menu, Shield, ShoppingCart, X, User } from 'lucide-react';
+import { useWishlist } from '@/contexts/WishlistContext';
+import { BookOpen, Heart, LayoutDashboard, LogOut, Menu, Shield, ShoppingCart, X, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -12,6 +13,7 @@ import { useState } from 'react';
 const Navbar = () => {
   const { user, logout, isAdmin } = useAuth();
   const { cartCount } = useCart();
+  const { wishlistCount } = useWishlist();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -51,6 +53,16 @@ const Navbar = () => {
                   </Button>
                 </Link>
               )}
+              <Link to="/wishlist" className="relative">
+                <Button variant="ghost" size="sm">
+                  <Heart className="h-4 w-4" />
+                  {wishlistCount > 0 && (
+                    <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
+                      {wishlistCount}
+                    </span>
+                  )}
+                </Button>
+              </Link>
               <Link to="/cart" className="relative">
                 <Button variant="ghost" size="sm">
                   <ShoppingCart className="h-4 w-4" />
@@ -123,6 +135,11 @@ const Navbar = () => {
                 </Link>
                 <Link to="/profile" onClick={() => setMobileOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start">Profile</Button>
+                </Link>
+                <Link to="/wishlist" onClick={() => setMobileOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start">
+                    <Heart className="mr-2 h-4 w-4" />Wishlist {wishlistCount > 0 && `(${wishlistCount})`}
+                  </Button>
                 </Link>
                 <Link to="/cart" onClick={() => setMobileOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start">

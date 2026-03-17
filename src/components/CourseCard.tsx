@@ -1,7 +1,9 @@
 import { Subject } from '@/types/lms';
 import { Link } from 'react-router-dom';
-import { Star } from 'lucide-react';
+import { Star, Heart } from 'lucide-react';
 import { useState } from 'react';
+import { useWishlist } from '@/contexts/WishlistContext';
+import { toast } from 'sonner';
 
 interface CourseCardProps {
   subject: Subject;
@@ -9,6 +11,15 @@ interface CourseCardProps {
 
 const CourseCard = ({ subject }: CourseCardProps) => {
   const [imgError, setImgError] = useState(false);
+  const { isInWishlist, toggleWishlist } = useWishlist();
+  const wishlisted = isInWishlist(subject.id);
+
+  const handleWishlistClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleWishlist(subject.id);
+    toast.success(wishlisted ? 'Removed from wishlist' : 'Added to wishlist');
+  };
 
   const renderStars = (rating: number) => {
     const stars = [];
@@ -37,6 +48,17 @@ const CourseCard = ({ subject }: CourseCardProps) => {
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             onError={() => setImgError(true)}
           />
+          {/* Wishlist heart */}
+          <button
+            onClick={handleWishlistClick}
+            className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-card/80 backdrop-blur-sm transition-all hover:bg-card hover:scale-110"
+          >
+            <Heart
+              className={`h-4 w-4 transition-colors ${
+                wishlisted ? 'fill-destructive text-destructive' : 'text-foreground'
+              }`}
+            />
+          </button>
           {subject.bestseller && (
             <div className="absolute left-2 top-2">
               <span className="rounded bg-accent px-2 py-0.5 text-xs font-bold text-accent-foreground">

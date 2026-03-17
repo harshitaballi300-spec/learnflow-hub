@@ -2,13 +2,14 @@ import { useParams, Link } from 'react-router-dom';
 import { mockSubjects, mockSections, mockInstructors } from '@/data/mockData';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
+import { useWishlist } from '@/contexts/WishlistContext';
 import SectionAccordion from '@/components/SectionAccordion';
 import ProgressBar from '@/components/ProgressBar';
 import { Button } from '@/components/ui/button';
 import {
   BookOpen, Clock, Users, CheckCircle2, ShoppingCart, Star,
   Globe, BarChart3, Award, PlayCircle, FileText, Download,
-  Smartphone, Trophy, ChevronDown, ChevronUp
+  Smartphone, Trophy, ChevronDown, ChevronUp, Heart
 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -17,7 +18,9 @@ const CourseDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const { addToCart, isInCart, isPurchased } = useCart();
+  const { isInWishlist, toggleWishlist } = useWishlist();
   const subject = mockSubjects.find(s => s.id === id);
+  const wishlisted = isInWishlist(id || '');
   const sections = mockSections.filter(s => s.subjectId === id);
   const instructor = mockInstructors.find(i => i.name === subject?.instructor);
 
@@ -252,6 +255,16 @@ const CourseDetailPage = () => {
                       )}
                     </div>
 
+                    <button
+                      onClick={() => {
+                        toggleWishlist(subject.id);
+                        toast.success(wishlisted ? 'Removed from wishlist' : 'Added to wishlist');
+                      }}
+                      className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-border py-2.5 text-sm font-bold transition-colors hover:bg-muted"
+                    >
+                      <Heart className={`h-4 w-4 ${wishlisted ? 'fill-destructive text-destructive' : ''}`} />
+                      {wishlisted ? 'Wishlisted' : 'Add to Wishlist'}
+                    </button>
                     <p className="mt-3 text-center text-xs text-muted-foreground">30-Day Money-Back Guarantee</p>
 
                     {/* This course includes */}
