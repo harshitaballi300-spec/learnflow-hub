@@ -13,6 +13,7 @@ import { useState } from 'react';
 const Navbar = () => {
   const { user, logout, isAdmin } = useAuth();
   const { cartCount } = useCart();
+  const { wishlistCount } = useWishlist();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
