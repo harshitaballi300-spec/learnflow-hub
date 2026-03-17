@@ -2,13 +2,14 @@ import { useParams, Link } from 'react-router-dom';
 import { mockSubjects, mockSections, mockInstructors } from '@/data/mockData';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
+import { useWishlist } from '@/contexts/WishlistContext';
 import SectionAccordion from '@/components/SectionAccordion';
 import ProgressBar from '@/components/ProgressBar';
 import { Button } from '@/components/ui/button';
 import {
   BookOpen, Clock, Users, CheckCircle2, ShoppingCart, Star,
   Globe, BarChart3, Award, PlayCircle, FileText, Download,
-  Smartphone, Trophy, ChevronDown, ChevronUp
+  Smartphone, Trophy, ChevronDown, ChevronUp, Heart
 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
