@@ -53,6 +53,16 @@ const Navbar = () => {
                   </Button>
                 </Link>
               )}
+              <Link to="/wishlist" className="relative">
+                <Button variant="ghost" size="sm">
+                  <Heart className="h-4 w-4" />
+                  {wishlistCount > 0 && (
+                    <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
+                      {wishlistCount}
+                    </span>
+                  )}
+                </Button>
+              </Link>
               <Link to="/cart" className="relative">
                 <Button variant="ghost" size="sm">
                   <ShoppingCart className="h-4 w-4" />
