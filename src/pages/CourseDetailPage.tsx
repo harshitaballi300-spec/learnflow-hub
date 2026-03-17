@@ -18,7 +18,9 @@ const CourseDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const { addToCart, isInCart, isPurchased } = useCart();
+  const { isInWishlist, toggleWishlist } = useWishlist();
   const subject = mockSubjects.find(s => s.id === id);
+  const wishlisted = isInWishlist(id || '');
   const sections = mockSections.filter(s => s.subjectId === id);
   const instructor = mockInstructors.find(i => i.name === subject?.instructor);
 
