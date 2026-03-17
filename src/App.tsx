@@ -48,6 +48,7 @@ const App = () => (
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/payment" element={<PaymentPage />} />
                 <Route path="/certificate/:id" element={<CertificatePage />} />
+                <Route path="/wishlist" element={<WishlistPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <AIChatbot />
