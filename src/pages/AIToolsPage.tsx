@@ -30,31 +30,23 @@ interface HistoryEntry {
 }
 
 /* ─── Hugging Face API helper ─── */
-const HF_STORAGE_KEY = 'lms-hf-api-key';
 const HISTORY_KEY = 'lms-ai-history';
 
-const getApiKey = () => localStorage.getItem(HF_STORAGE_KEY) || '';
-
 async function hfInference(model: string, body: object) {
-  const key = getApiKey();
-  if (!key) throw new Error('Please set your Hugging Face API key in Settings.');
-
-  const res = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${key}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
+  const { data, error } = await supabase.functions.invoke('huggingface-proxy', {
+    body: { model, ...body },
   });
 
-  if (!res.ok) {
-    const err = await res.text();
-    if (res.status === 503) throw new Error('Model is loading, please try again in a few seconds.');
-    if (res.status === 401) throw new Error('Invalid API key. Check your Hugging Face token.');
-    throw new Error(`API error (${res.status}): ${err}`);
+  if (error) {
+    const msg = typeof error === 'object' && 'message' in error ? error.message : String(error);
+    throw new Error(msg);
   }
-  return res.json();
+
+  if (data?.error) {
+    throw new Error(data.error);
+  }
+
+  return data;
 }
 
 function saveHistory(entry: Omit<HistoryEntry, 'id' | 'timestamp'>) {
