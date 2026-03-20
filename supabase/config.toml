@@ -1,1 +1,4 @@
 project_id = "mmgbkaiokzgfpfdhlkfj"
+
+[functions.huggingface-proxy]
+verify_jwt = false
