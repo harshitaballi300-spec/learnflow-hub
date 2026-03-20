@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
   Sparkles, MessageSquare, BarChart3, Send, Loader2, Trash2,
@@ -29,7 +30,7 @@ interface HistoryEntry {
   timestamp: string;
 }
 
-/* ─── Hugging Face API helper ─── */
+/* ─── Hugging Face API helper (via edge function proxy) ─── */
 const HISTORY_KEY = 'lms-ai-history';
 
 async function hfInference(model: string, body: object) {
@@ -268,8 +269,6 @@ const SentimentTab = () => {
 /* ─── Main Page ─── */
 const AIToolsPage = () => {
   const { user } = useAuth();
-  const [apiKey, setApiKey] = useState(getApiKey());
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
 
   useEffect(() => {
@@ -277,14 +276,6 @@ const AIToolsPage = () => {
   }, []);
 
   if (!user) return <Navigate to="/login" replace />;
-
-  const hasKey = !!getApiKey();
-
-  const saveKey = () => {
-    localStorage.setItem(HF_STORAGE_KEY, apiKey);
-    toast.success('API key saved!');
-    setSettingsOpen(false);
-  };
 
   const clearHistory = () => {
     localStorage.removeItem(HISTORY_KEY);
@@ -294,62 +285,18 @@ const AIToolsPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <div className="bg-sidebar text-sidebar-foreground">
         <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="font-display text-2xl font-bold sm:text-3xl flex items-center gap-2">
-                <Sparkles className="h-7 w-7 text-primary" />AI Tools
-              </h1>
-              <p className="mt-1 text-sidebar-foreground/60">Explore AI-powered features powered by Hugging Face</p>
-            </div>
-            <div className="flex gap-2">
-              <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-1.5 border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent">
-                    <Settings2 className="h-4 w-4" />
-                    {hasKey ? 'API Key Set' : 'Set API Key'}
-                    {!hasKey && <AlertCircle className="h-3.5 w-3.5 text-destructive" />}
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Hugging Face API Key</DialogTitle>
-                    <DialogDescription>
-                      Enter your Hugging Face API token. Get one free at{' '}
-                      <a href="https://huggingface.co/settings/tokens" target="_blank" rel="noreferrer" className="text-primary underline">
-                        huggingface.co/settings/tokens
-                      </a>
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4 pt-2">
-                    <Input
-                      type="password"
-                      placeholder="hf_xxxxxxxxxxxx"
-                      value={apiKey}
-                      onChange={e => setApiKey(e.target.value)}
-                    />
-                    <Button onClick={saveKey} className="w-full">Save Key</Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
+          <div>
+            <h1 className="font-display text-2xl font-bold sm:text-3xl flex items-center gap-2">
+              <Sparkles className="h-7 w-7 text-primary" />AI Tools
+            </h1>
+            <p className="mt-1 text-sidebar-foreground/60">Explore AI-powered features powered by Hugging Face</p>
           </div>
         </div>
       </div>
 
       <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-        {!hasKey && (
-          <div className="mb-6 flex items-center gap-3 rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm">
-            <AlertCircle className="h-5 w-5 shrink-0 text-destructive" />
-            <p>
-              You need to set your Hugging Face API key before using AI tools.{' '}
-              <button onClick={() => setSettingsOpen(true)} className="font-medium text-primary underline">Set it now</button>
-            </p>
-          </div>
-        )}
-
         <Tabs defaultValue="text" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="text" className="gap-1.5">
@@ -394,7 +341,6 @@ const AIToolsPage = () => {
           </TabsContent>
         </Tabs>
 
-        {/* History */}
         {history.length > 0 && (
           <div className="mt-8">
             <div className="mb-3 flex items-center justify-between">
