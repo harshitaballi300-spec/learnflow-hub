@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
-import { BookOpen, Heart, LayoutDashboard, LogOut, Menu, Shield, ShoppingCart, X, User } from 'lucide-react';
+import { BookOpen, Heart, LayoutDashboard, LogOut, Menu, Shield, ShoppingCart, X, User, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -44,6 +44,11 @@ const Navbar = () => {
               <Link to="/dashboard">
                 <Button variant="ghost" size="sm">
                   <LayoutDashboard className="mr-1.5 h-4 w-4" />My Learning
+                </Button>
+              </Link>
+              <Link to="/ai-tools">
+                <Button variant="ghost" size="sm">
+                  <Sparkles className="mr-1.5 h-4 w-4" />AI Tools
                 </Button>
               </Link>
               {isAdmin && (
@@ -132,6 +137,11 @@ const Navbar = () => {
               <>
                 <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start">My Learning</Button>
+                </Link>
+                <Link to="/ai-tools" onClick={() => setMobileOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start">
+                    <Sparkles className="mr-2 h-4 w-4" />AI Tools
+                  </Button>
                 </Link>
                 <Link to="/profile" onClick={() => setMobileOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start">Profile</Button>
