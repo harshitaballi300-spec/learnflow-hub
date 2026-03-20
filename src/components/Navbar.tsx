@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
-import { BookOpen, Heart, LayoutDashboard, LogOut, Menu, Shield, ShoppingCart, X, User } from 'lucide-react';
+import { BookOpen, Heart, LayoutDashboard, LogOut, Menu, Shield, ShoppingCart, X, User, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
