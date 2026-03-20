@@ -4,17 +4,14 @@ import { Navigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
-  Sparkles, MessageSquare, BarChart3, Send, Loader2, Trash2, Settings2,
-  Bot, User as UserIcon, Copy, CheckCircle2, AlertCircle,
+  Sparkles, MessageSquare, BarChart3, Send, Loader2, Trash2,
+  Bot, User as UserIcon, Copy, CheckCircle2,
 } from 'lucide-react';
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription,
-} from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 /* ─── Types ─── */
 interface ChatMessage {
