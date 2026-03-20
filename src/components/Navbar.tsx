@@ -138,6 +138,11 @@ const Navbar = () => {
                 <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start">My Learning</Button>
                 </Link>
+                <Link to="/ai-tools" onClick={() => setMobileOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start">
+                    <Sparkles className="mr-2 h-4 w-4" />AI Tools
+                  </Button>
+                </Link>
                 <Link to="/profile" onClick={() => setMobileOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start">Profile</Button>
                 </Link>
