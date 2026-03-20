@@ -46,6 +46,11 @@ const Navbar = () => {
                   <LayoutDashboard className="mr-1.5 h-4 w-4" />My Learning
                 </Button>
               </Link>
+              <Link to="/ai-tools">
+                <Button variant="ghost" size="sm">
+                  <Sparkles className="mr-1.5 h-4 w-4" />AI Tools
+                </Button>
+              </Link>
               {isAdmin && (
                 <Link to="/admin">
                   <Button variant="ghost" size="sm">
