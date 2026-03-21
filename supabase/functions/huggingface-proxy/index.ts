@@ -4,7 +4,7 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
-const HF_API_URL = 'https://api-inference.huggingface.co/models';
+const HF_API_URL = 'https://router.huggingface.co/hf-inference/models';
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
