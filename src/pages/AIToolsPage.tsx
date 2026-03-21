@@ -69,7 +69,7 @@ const TextGenerationTab = () => {
     setLoading(true);
     setOutput('');
     try {
-      const data = await hfInference('gpt2', { inputs: prompt, parameters: { max_new_tokens: 200 } });
+      const data = await hfInference('openai-community/gpt2', { inputs: prompt, parameters: { max_new_tokens: 200 } });
       const text = data?.[0]?.generated_text || 'No output generated.';
       setOutput(text);
       saveHistory({ type: 'text', input: prompt, output: text });
@@ -218,7 +218,7 @@ const SentimentTab = () => {
     setLoading(true);
     setResult(null);
     try {
-      const data = await hfInference('distilbert-base-uncased-finetuned-sst-2-english', { inputs: text });
+      const data = await hfInference('distilbert/distilbert-base-uncased-finetuned-sst-2-english', { inputs: text });
       const labels = data?.[0] || data;
       setResult(Array.isArray(labels) ? labels : [labels]);
       const top = Array.isArray(labels) ? labels[0] : labels;
