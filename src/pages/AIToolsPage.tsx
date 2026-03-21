@@ -33,13 +33,22 @@ interface HistoryEntry {
 /* ─── Hugging Face API helper (via edge function proxy) ─── */
 const HISTORY_KEY = 'lms-ai-history';
 
+const getErrorMessage = (error: unknown) => {
+  if (error instanceof Error && error.message) return error.message;
+  if (typeof error === 'object' && error !== null && 'message' in error) {
+    const maybeMessage = (error as { message?: unknown }).message;
+    if (typeof maybeMessage === 'string' && maybeMessage) return maybeMessage;
+  }
+  return 'Something went wrong. Please try again.';
+};
+
 async function hfInference(model: string, body: object) {
   const { data, error } = await supabase.functions.invoke('huggingface-proxy', {
     body: { model, ...body },
   });
 
   if (error) {
-    const msg = typeof error === 'object' && 'message' in error ? error.message : String(error);
+    const msg = getErrorMessage(error);
     throw new Error(msg);
   }
 
@@ -70,11 +79,12 @@ const TextGenerationTab = () => {
     setOutput('');
     try {
       const data = await hfInference('openai-community/gpt2', { inputs: prompt, parameters: { max_new_tokens: 200 } });
-      const text = data?.[0]?.generated_text || 'No output generated.';
+      const first = Array.isArray(data) ? data[0] : data;
+      const text = first?.generated_text || first?.summary_text || 'No output generated.';
       setOutput(text);
       saveHistory({ type: 'text', input: prompt, output: text });
-    } catch (e: any) {
-      toast.error(e.message);
+    } catch (error) {
+      toast.error(getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -142,8 +152,8 @@ const QAChatbotTab = () => {
       const botMsg: ChatMessage = { id: crypto.randomUUID(), role: 'assistant', content: answer, timestamp: new Date() };
       setMessages(prev => [...prev, botMsg]);
       saveHistory({ type: 'qa', input, output: answer });
-    } catch (e: any) {
-      toast.error(e.message);
+    } catch (error) {
+      toast.error(getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -219,12 +229,22 @@ const SentimentTab = () => {
     setResult(null);
     try {
       const data = await hfInference('distilbert/distilbert-base-uncased-finetuned-sst-2-english', { inputs: text });
-      const labels = data?.[0] || data;
-      setResult(Array.isArray(labels) ? labels : [labels]);
-      const top = Array.isArray(labels) ? labels[0] : labels;
+      const maybeNested = Array.isArray(data) ? data[0] : data;
+      const labels = Array.isArray(maybeNested) ? maybeNested : [maybeNested];
+      const normalized = labels.filter(
+        (item): item is { label: string; score: number } =>
+          typeof item?.label === 'string' && typeof item?.score === 'number',
+      );
+
+      if (normalized.length === 0) {
+        throw new Error('Unexpected sentiment response format');
+      }
+
+      setResult(normalized);
+      const top = normalized[0];
       saveHistory({ type: 'sentiment', input: text, output: `${top.label} (${(top.score * 100).toFixed(1)}%)` });
-    } catch (e: any) {
-      toast.error(e.message);
+    } catch (error) {
+      toast.error(getErrorMessage(error));
     } finally {
       setLoading(false);
     }
