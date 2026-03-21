@@ -218,7 +218,7 @@ const SentimentTab = () => {
     setLoading(true);
     setResult(null);
     try {
-      const data = await hfInference('distilbert-base-uncased-finetuned-sst-2-english', { inputs: text });
+      const data = await hfInference('distilbert/distilbert-base-uncased-finetuned-sst-2-english', { inputs: text });
       const labels = data?.[0] || data;
       setResult(Array.isArray(labels) ? labels : [labels]);
       const top = Array.isArray(labels) ? labels[0] : labels;
