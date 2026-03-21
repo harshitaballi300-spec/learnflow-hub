@@ -69,7 +69,7 @@ const TextGenerationTab = () => {
     setLoading(true);
     setOutput('');
     try {
-      const data = await hfInference('gpt2', { inputs: prompt, parameters: { max_new_tokens: 200 } });
+      const data = await hfInference('openai-community/gpt2', { inputs: prompt, parameters: { max_new_tokens: 200 } });
       const text = data?.[0]?.generated_text || 'No output generated.';
       setOutput(text);
       saveHistory({ type: 'text', input: prompt, output: text });
