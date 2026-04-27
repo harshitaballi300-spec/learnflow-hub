@@ -78,7 +78,7 @@ const TextGenerationTab = () => {
     setLoading(true);
     setOutput('');
     try {
-      const data = await hfInference('openai-community/gpt2', { inputs: prompt, parameters: { max_new_tokens: 200 } });
+      const data = await hfInference('HuggingFaceH4/zephyr-7b-beta', { inputs: prompt, parameters: { max_new_tokens: 200, return_full_text: false } });
       const first = Array.isArray(data) ? data[0] : data;
       const text = first?.generated_text || first?.summary_text || 'No output generated.';
       setOutput(text);
