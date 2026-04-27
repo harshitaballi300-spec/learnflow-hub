@@ -62,8 +62,7 @@ function shapeResponse(task: Task, content: string, originalInput: unknown) {
   }
 
   // text generation — return HF-compatible shape
-  const prompt = String(originalInput ?? '');
-  return [{ generated_text: prompt + (prompt && !content.startsWith(' ') ? ' ' : '') + content.trim() }];
+  return [{ generated_text: content.trim() }];
 }
 
 Deno.serve(async (req) => {
