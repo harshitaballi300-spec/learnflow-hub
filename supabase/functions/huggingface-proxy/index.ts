@@ -99,19 +99,6 @@ Deno.serve(async (req) => {
 
     let result = await callHF(model, body, apiKey);
 
-    if (!result.ok && result.status === 404 && model === TEXT_MODEL) {
-      console.warn(`[huggingface-proxy] primary text model returned 404. Falling back to ${TEXT_FALLBACK_MODEL}`);
-      result = await callHF(TEXT_FALLBACK_MODEL, { inputs }, apiKey);
-
-      if (result.ok) {
-        const generatedText = toGeneratedText(result.data) ?? 'No output generated.';
-        return jsonResponse(
-          [{ generated_text: generatedText, model_used: TEXT_FALLBACK_MODEL, fallback_from: TEXT_MODEL }],
-          200,
-        );
-      }
-    }
-
     if (!result.ok) {
       const message = extractErrorMessage(result.data);
       console.error(`[huggingface-proxy] upstream error status=${result.status} model=${result.model} message=${message}`);
