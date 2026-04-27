@@ -5,6 +5,9 @@ export interface User {
   role: 'admin' | 'student';
   avatar?: string;
   createdAt: string;
+  phone?: string;
+  bio?: string;
+  emailNotifications?: boolean;
 }
 
 export interface Subject {

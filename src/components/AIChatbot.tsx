@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { mockSubjects, mockInstructors } from '@/data/mockData';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface Message {
   id: string;
@@ -16,65 +17,6 @@ const SUGGESTIONS = [
   'Tell me about Python course',
   'Who are the instructors?',
 ];
-
-function generateResponse(input: string): string {
-  const lower = input.toLowerCase();
-
-  if (lower.includes('hello') || lower.includes('hi') || lower.includes('hey')) {
-    return "Hello! 👋 Welcome to LearnHub! I'm your AI learning assistant. I can help you find courses, recommend learning paths, and answer questions about our platform. What would you like to know?";
-  }
-
-  if (lower.includes('course') && (lower.includes('what') || lower.includes('list') || lower.includes('offer') || lower.includes('available'))) {
-    const courseList = mockSubjects.map(s => `• **${s.title}** — ₹${s.price} (${s.rating}⭐)`).join('\n');
-    return `We currently offer ${mockSubjects.length} courses:\n\n${courseList}\n\nWould you like details about any specific course?`;
-  }
-
-  if (lower.includes('python')) {
-    const python = mockSubjects.find(s => s.id === 's1');
-    if (python) {
-      return `🐍 **${python.title}**\n\n${python.description}\n\n• **Rating:** ${python.rating}⭐ (${python.reviewCount.toLocaleString()} reviews)\n• **Duration:** ${python.totalDuration}\n• **Level:** ${python.level}\n• **Price:** ₹${python.price} ~~₹${python.originalPrice}~~\n• **Instructor:** ${python.instructor}\n\nThis is one of our bestselling courses! Would you like to enroll?`;
-    }
-  }
-
-  if (lower.includes('react') || lower.includes('web dev')) {
-    const react = mockSubjects.find(s => s.id === 's2');
-    if (react) {
-      return `⚛️ **${react.title}**\n\n${react.description}\n\n• **Rating:** ${react.rating}⭐\n• **Duration:** ${react.totalDuration}\n• **Price:** ₹${react.price}\n• **Instructor:** ${react.instructor}\n\nPerfect for aspiring web developers!`;
-    }
-  }
-
-  if (lower.includes('machine learning') || lower.includes('ml') || lower.includes('ai course')) {
-    const ml = mockSubjects.find(s => s.id === 's4');
-    if (ml) {
-      return `🤖 **${ml.title}**\n\n${ml.description}\n\n• **Rating:** ${ml.rating}⭐\n• **Duration:** ${ml.totalDuration}\n• **Price:** ₹${ml.price}\n\nGreat choice if you want to get into AI!`;
-    }
-  }
-
-  if (lower.includes('instructor') || lower.includes('teacher') || lower.includes('mentor')) {
-    const list = mockInstructors.map(i => `• **${i.name}** — ${i.expertise} (${i.rating}⭐, ${i.studentCount?.toLocaleString()} students)`).join('\n');
-    return `Our expert instructors:\n\n${list}\n\nAll instructors are industry professionals with real-world experience!`;
-  }
-
-  if (lower.includes('beginner') || lower.includes('start') || lower.includes('new')) {
-    const beginner = mockSubjects.filter(s => s.level === 'Beginner');
-    const list = beginner.map(s => `• **${s.title}** — ₹${s.price}`).join('\n');
-    return `Great! Here are our beginner-friendly courses:\n\n${list}\n\nI'd especially recommend the **Python Programming Masterclass** — it's our most popular beginner course with ${mockSubjects[0].reviewCount.toLocaleString()} reviews!`;
-  }
-
-  if (lower.includes('price') || lower.includes('cost') || lower.includes('free') || lower.includes('discount')) {
-    return `Our courses range from **₹449 to ₹899**, with discounts of up to 85% off! 🎉\n\nWe also offer:\n• 30-day money-back guarantee\n• Lifetime access to all purchased courses\n• Certificate of completion\n\nCheck out our courses page for the latest deals!`;
-  }
-
-  if (lower.includes('certificate')) {
-    return "Yes! 🎓 All our courses come with a **Certificate of Completion** that you can add to your LinkedIn profile or resume. Complete all the lessons and quizzes to earn yours!";
-  }
-
-  if (lower.includes('thank')) {
-    return "You're welcome! 😊 Happy learning! Feel free to ask me anything else anytime.";
-  }
-
-  return `I'd be happy to help! Here are some things I can assist with:\n\n• 📚 **Browse courses** — Ask about specific topics\n• 🎯 **Get recommendations** — Tell me your skill level\n• 👨‍🏫 **Learn about instructors** — Know your teachers\n• 💰 **Pricing info** — Discounts and offers\n• 🎓 **Certificates** — Completion credentials\n\nWhat would you like to know?`;
-}
 
 const AIChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -99,31 +41,60 @@ const AIChatbot = () => {
     if (isOpen) inputRef.current?.focus();
   }, [isOpen]);
 
-  const sendMessage = (text: string) => {
-    if (!text.trim()) return;
+  const sendMessage = async (text: string) => {
+    const trimmed = text.trim();
+    if (!trimmed || isTyping) return;
 
     const userMsg: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: text.trim(),
+      content: trimmed,
       timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMsg]);
+    const nextMessages = [...messages, userMsg];
+    setMessages(nextMessages);
     setInput('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      const response = generateResponse(text);
-      const botMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: response,
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, botMsg]);
+    try {
+      const history = nextMessages
+        .filter(m => m.id !== '1' || nextMessages.length === 2) // include greeting only when needed
+        .map(m => ({ role: m.role, content: m.content }));
+
+      const { data, error } = await supabase.functions.invoke('chatbot', {
+        body: { messages: history },
+      });
+
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      const reply: string = data?.reply ?? "Sorry, I couldn't generate a response. Please try again.";
+
+      setMessages(prev => [
+        ...prev,
+        {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: reply,
+          timestamp: new Date(),
+        },
+      ]);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Something went wrong';
+      toast.error(message);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: "I'm having trouble responding right now. Please try again in a moment.",
+          timestamp: new Date(),
+        },
+      ]);
+    } finally {
       setIsTyping(false);
-    }, 800 + Math.random() * 700);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
