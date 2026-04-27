@@ -5,8 +5,6 @@ const corsHeaders = {
 };
 
 const HF_API_URL = 'https://router.huggingface.co/hf-inference/models';
-const TEXT_MODEL = 'openai-community/gpt2';
-const TEXT_FALLBACK_MODEL = 'facebook/bart-large-cnn';
 
 type HFCallResult = {
   ok: boolean;
