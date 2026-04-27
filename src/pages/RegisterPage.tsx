@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,7 +11,6 @@ const RegisterPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -24,9 +23,17 @@ const RegisterPage = () => {
       toast.error('Password must be at least 6 characters');
       return;
     }
-    login(email, password);
-    toast.success('Account created! Welcome to LearnHub.');
-    navigate('/dashboard');
+    // Save registered account locally (demo only) — do NOT auto-login
+    try {
+      const raw = localStorage.getItem('learnhub_registered_users');
+      const users = raw ? JSON.parse(raw) : [];
+      if (!users.find((u: any) => u.email === email)) {
+        users.push({ name, email, password });
+        localStorage.setItem('learnhub_registered_users', JSON.stringify(users));
+      }
+    } catch {}
+    toast.success('Account created! Please log in to continue.');
+    navigate('/login');
   };
 
   return (
