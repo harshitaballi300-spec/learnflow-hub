@@ -5,17 +5,42 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,
+} from '@/components/ui/dialog';
+import { Switch } from '@/components/ui/switch';
 import { User, Mail, Camera, Save, Shield } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 const ProfilePage = () => {
   const { user, updateProfile } = useAuth();
 
-  const [name, setName] = useState(user?.name || '');
-  const [email, setEmail] = useState(user?.email || '');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [bio, setBio] = useState('');
+
+  // Sync inputs whenever the logged-in user changes (prevents stale inputs after re-login)
+  useEffect(() => {
+    setName(user?.name ?? '');
+    setEmail(user?.email ?? '');
+    setPhone(user?.phone ?? '');
+    setBio(user?.bio ?? '');
+  }, [user?.id, user?.name, user?.email, user?.phone, user?.bio]);
+
+  // Password dialog state
+  const [pwOpen, setPwOpen] = useState(false);
+  const [currentPw, setCurrentPw] = useState('');
+  const [newPw, setNewPw] = useState('');
+  const [confirmPw, setConfirmPw] = useState('');
+
+  // Notifications dialog
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [emailNotif, setEmailNotif] = useState(user?.emailNotifications ?? true);
+  useEffect(() => {
+    setEmailNotif(user?.emailNotifications ?? true);
+  }, [user?.id, user?.emailNotifications]);
 
   if (!user) return <Navigate to="/login" replace />;
 
@@ -31,8 +56,35 @@ const ProfilePage = () => {
       toast.error('Name is required');
       return;
     }
-    updateProfile({ name: name.trim(), email: email.trim() });
+    updateProfile({ name: name.trim(), email: email.trim(), phone: phone.trim(), bio: bio.trim() });
     toast.success('Profile updated successfully!');
+  };
+
+  const handlePasswordUpdate = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentPw || !newPw || !confirmPw) {
+      toast.error('Please fill in all password fields');
+      return;
+    }
+    if (newPw.length < 6) {
+      toast.error('New password must be at least 6 characters');
+      return;
+    }
+    if (newPw !== confirmPw) {
+      toast.error('New passwords do not match');
+      return;
+    }
+    setCurrentPw('');
+    setNewPw('');
+    setConfirmPw('');
+    setPwOpen(false);
+    toast.success('Password updated successfully!');
+  };
+
+  const handleNotifSave = () => {
+    updateProfile({ emailNotifications: emailNotif });
+    setNotifOpen(false);
+    toast.success(`Email notifications ${emailNotif ? 'enabled' : 'disabled'}`);
   };
 
   return (
@@ -122,14 +174,65 @@ const ProfilePage = () => {
               <p className="font-medium">Change Password</p>
               <p className="text-sm text-muted-foreground">Update your password regularly for security</p>
             </div>
-            <Button variant="outline" size="sm">Update</Button>
+            <Dialog open={pwOpen} onOpenChange={setPwOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm">Update</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Change Password</DialogTitle>
+                  <DialogDescription>Enter your current password and choose a new one.</DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handlePasswordUpdate} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="currentPw">Current Password</Label>
+                    <Input id="currentPw" type="password" value={currentPw} onChange={e => setCurrentPw(e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="newPw">New Password</Label>
+                    <Input id="newPw" type="password" value={newPw} onChange={e => setNewPw(e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPw">Confirm New Password</Label>
+                    <Input id="confirmPw" type="password" value={confirmPw} onChange={e => setConfirmPw(e.target.value)} />
+                  </div>
+                  <DialogFooter>
+                    <Button type="button" variant="outline" onClick={() => setPwOpen(false)}>Cancel</Button>
+                    <Button type="submit" className="gradient-primary border-0 text-primary-foreground">Update Password</Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
           </div>
           <div className="flex items-center justify-between rounded-lg border border-border p-4">
             <div>
               <p className="font-medium">Email Notifications</p>
               <p className="text-sm text-muted-foreground">Receive updates about your courses and progress</p>
             </div>
-            <Button variant="outline" size="sm">Manage</Button>
+            <Dialog open={notifOpen} onOpenChange={setNotifOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm">Manage</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Email Notifications</DialogTitle>
+                  <DialogDescription>Choose what updates you'd like to receive by email.</DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 py-2">
+                  <div className="flex items-center justify-between rounded-lg border border-border p-4">
+                    <div>
+                      <p className="font-medium">Course updates & progress</p>
+                      <p className="text-sm text-muted-foreground">New lessons, reminders, and achievements</p>
+                    </div>
+                    <Switch checked={emailNotif} onCheckedChange={setEmailNotif} />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button type="button" variant="outline" onClick={() => setNotifOpen(false)}>Cancel</Button>
+                  <Button onClick={handleNotifSave} className="gradient-primary border-0 text-primary-foreground">Save Preferences</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </CardContent>
       </Card>

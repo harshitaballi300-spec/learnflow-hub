@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@/types/lms';
 import { mockUser, mockAdmin } from '@/data/mockData';
 
@@ -7,7 +7,7 @@ interface AuthContextType {
   login: (email: string, password: string) => boolean;
   logout: () => void;
   isAdmin: boolean;
-  updateProfile: (updates: Partial<Pick<User, 'name' | 'email' | 'avatar'>>) => void;
+  updateProfile: (updates: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -20,8 +20,22 @@ const AuthContext = createContext<AuthContextType>({
 
 export const useAuth = () => useContext(AuthContext);
 
+const STORAGE_KEY = 'learnhub_user';
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? (JSON.parse(raw) as User) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    if (user) localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    else localStorage.removeItem(STORAGE_KEY);
+  }, [user]);
 
   const login = (email: string, _password: string) => {
     if (email === 'admin@example.com') {
@@ -32,9 +46,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return true;
   };
 
-  const logout = () => setUser(null);
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem(STORAGE_KEY);
+  };
 
-  const updateProfile = (updates: Partial<Pick<User, 'name' | 'email' | 'avatar'>>) => {
+  const updateProfile = (updates: Partial<User>) => {
     if (user) {
       setUser({ ...user, ...updates });
     }
