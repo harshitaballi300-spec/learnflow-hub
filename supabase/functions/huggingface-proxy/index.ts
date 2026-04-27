@@ -4,15 +4,8 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
-const HF_API_URL = 'https://router.huggingface.co/hf-inference/models';
-
-type HFCallResult = {
-  ok: boolean;
-  status: number;
-  data: unknown;
-  model: string;
-  url: string;
-};
+const AI_GATEWAY_URL = 'https://ai.gateway.lovable.dev/v1/chat/completions';
+const DEFAULT_MODEL = 'google/gemini-2.5-flash';
 
 const jsonResponse = (payload: unknown, status = 200) =>
   new Response(JSON.stringify(payload), {
@@ -20,59 +13,57 @@ const jsonResponse = (payload: unknown, status = 200) =>
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
 
-const extractErrorMessage = (data: unknown) => {
-  if (typeof data === 'string' && data.trim()) return data;
-  if (typeof data === 'object' && data !== null) {
-    const record = data as Record<string, unknown>;
-    if (typeof record.error === 'string' && record.error.trim()) return record.error;
-    if (typeof record.message === 'string' && record.message.trim()) return record.message;
-  }
-  return 'Hugging Face request failed';
-};
+type Task = 'text' | 'qa' | 'sentiment';
 
-const toGeneratedText = (data: unknown) => {
-  if (Array.isArray(data) && typeof data[0] === 'object' && data[0] !== null) {
-    const first = data[0] as Record<string, unknown>;
-    if (typeof first.generated_text === 'string') return first.generated_text;
-    if (typeof first.summary_text === 'string') return first.summary_text;
-  }
+function detectTask(model: string, inputs: unknown): Task {
+  if (inputs && typeof inputs === 'object' && 'question' in (inputs as object)) return 'qa';
+  if (/sentiment|sst|distilbert/i.test(model)) return 'sentiment';
+  return 'text';
+}
 
-  if (typeof data === 'string') return data;
-  return null;
-};
-
-async function callHF(model: string, payload: Record<string, unknown>, apiKey: string): Promise<HFCallResult> {
-  const normalizedModel = model.trim();
-  const url = `${HF_API_URL}/${normalizedModel}`;
-
-  console.log(`[huggingface-proxy] model=${normalizedModel}`);
-  console.log(`[huggingface-proxy] url=${url}`);
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  });
-
-  const raw = await response.text();
-  let parsed: unknown = raw;
-
-  try {
-    parsed = raw ? JSON.parse(raw) : null;
-  } catch {
-    parsed = raw;
+function buildMessages(task: Task, inputs: unknown) {
+  if (task === 'qa') {
+    const { question, context } = inputs as { question: string; context?: string };
+    return [
+      { role: 'system', content: 'You are a helpful Q&A assistant. Answer the user question concisely using ONLY the provided context. If the answer is not in the context, say so briefly.' },
+      { role: 'user', content: `Context:\n${context ?? ''}\n\nQuestion: ${question}` },
+    ];
   }
 
-  return {
-    ok: response.ok,
-    status: response.status,
-    data: parsed,
-    model: normalizedModel,
-    url,
-  };
+  if (task === 'sentiment') {
+    return [
+      { role: 'system', content: 'You are a sentiment classifier. Respond ONLY with a JSON object: {"label":"POSITIVE"|"NEGATIVE","score":<0-1 confidence as number>}. No prose, no markdown.' },
+      { role: 'user', content: `Classify the sentiment of this text:\n"""${String(inputs)}"""` },
+    ];
+  }
+
+  return [
+    { role: 'system', content: 'You are a creative writing assistant. Continue the user prompt naturally and engagingly.' },
+    { role: 'user', content: String(inputs) },
+  ];
+}
+
+function shapeResponse(task: Task, content: string, originalInput: unknown) {
+  if (task === 'qa') {
+    return { answer: content.trim(), score: 1 };
+  }
+
+  if (task === 'sentiment') {
+    try {
+      const match = content.match(/\{[\s\S]*\}/);
+      const parsed = match ? JSON.parse(match[0]) : null;
+      const labelRaw = String(parsed?.label ?? '').toUpperCase();
+      const label = labelRaw.includes('POS') ? 'POSITIVE' : labelRaw.includes('NEG') ? 'NEGATIVE' : 'NEUTRAL';
+      const score = typeof parsed?.score === 'number' ? parsed.score : 0.9;
+      return [[{ label, score }]];
+    } catch {
+      return [[{ label: 'NEUTRAL', score: 0.5 }]];
+    }
+  }
+
+  // text generation — return HF-compatible shape
+  const prompt = String(originalInput ?? '');
+  return [{ generated_text: prompt + (prompt && !content.startsWith(' ') ? ' ' : '') + content.trim() }];
 }
 
 Deno.serve(async (req) => {
@@ -80,43 +71,53 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const apiKey = Deno.env.get('HUGGINGFACE_API_KEY');
+  const apiKey = Deno.env.get('LOVABLE_API_KEY');
   if (!apiKey) {
-    return jsonResponse({ error: 'HUGGINGFACE_API_KEY not configured' }, 500);
+    return jsonResponse({ error: 'LOVABLE_API_KEY not configured' }, 500);
   }
 
   try {
-    const { model, inputs, parameters } = await req.json();
+    const { model, inputs } = await req.json();
 
-    if (typeof model !== 'string' || !model.trim() || inputs === undefined) {
-      return jsonResponse({ error: "Missing or invalid 'model' or 'inputs'" }, 400);
+    if (inputs === undefined || inputs === null) {
+      return jsonResponse({ error: "Missing 'inputs'" }, 400);
     }
 
-    const body: Record<string, unknown> = { inputs };
-    if (parameters && typeof parameters === 'object') {
-      body.parameters = parameters;
+    const task = detectTask(typeof model === 'string' ? model : '', inputs);
+    const messages = buildMessages(task, inputs);
+
+    console.log(`[ai-proxy] task=${task} model=${DEFAULT_MODEL}`);
+
+    const response = await fetch(AI_GATEWAY_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: DEFAULT_MODEL,
+        messages,
+      }),
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error(`[ai-proxy] upstream error ${response.status}: ${errText}`);
+      if (response.status === 429) {
+        return jsonResponse({ error: 'Rate limit reached. Please try again shortly.' }, 429);
+      }
+      if (response.status === 402) {
+        return jsonResponse({ error: 'AI credits exhausted. Please add credits to your Lovable workspace.' }, 402);
+      }
+      return jsonResponse({ error: 'AI request failed', details: errText }, response.status);
     }
 
-    let result = await callHF(model, body, apiKey);
-
-    if (!result.ok) {
-      const message = extractErrorMessage(result.data);
-      console.error(`[huggingface-proxy] upstream error status=${result.status} model=${result.model} message=${message}`);
-      return jsonResponse(
-        {
-          error: message,
-          status: result.status,
-          model: result.model,
-          url: result.url,
-        },
-        result.status,
-      );
-    }
-
-    return jsonResponse(result.data, result.status);
+    const data = await response.json();
+    const content = data?.choices?.[0]?.message?.content ?? '';
+    return jsonResponse(shapeResponse(task, content, inputs));
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown server error';
-    console.error(`[huggingface-proxy] runtime error: ${message}`);
+    console.error(`[ai-proxy] runtime error: ${message}`);
     return jsonResponse({ error: message }, 500);
   }
 });
